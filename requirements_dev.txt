@@ -77,18 +77,6 @@ deprecated==1.2.12
     #   jwcrypto
 distlib==0.3.2
     # via virtualenv
-django-choices==1.7.2
-    # via -r ./requirements.txt
-django-cors-headers==3.7.0
-    # via -r requirements_dev.in
-django-debug-toolbar==3.2.1
-    # via -r requirements_dev.in
-django-extensions==3.1.3
-    # via -r ./requirements.txt
-django-filter==2.4.0
-    # via -r ./requirements.txt
-django-rest-swagger==2.2.0
-    # via -r ./requirements.txt
 django==3.2.6
     # via
     #   -r ./requirements.txt
@@ -101,6 +89,27 @@ django==3.2.6
     #   djangorestframework
     #   drf-yasg
     #   model-bakery
+django-choices==1.7.2
+    # via -r ./requirements.txt
+django-cors-headers==3.7.0
+    # via -r requirements_dev.in
+django-debug-toolbar==3.2.1
+    # via -r requirements_dev.in
+django-extensions==3.1.3
+    # via -r ./requirements.txt
+django-filter==2.4.0
+    # via -r ./requirements.txt
+django-rest-swagger==2.2.0
+    # via -r ./requirements.txt
+djangorestframework==3.12.4
+    # via
+    #   -r ./requirements.txt
+    #   django-rest-swagger
+    #   djangorestframework-csv
+    #   djangorestframework-gis
+    #   drf-amsterdam
+    #   drf-extensions
+    #   drf-yasg
 djangorestframework-csv==2.1.1
     # via
     #   -r ./requirements.txt
@@ -111,15 +120,6 @@ djangorestframework-xml==2.0.0
     # via
     #   -r ./requirements.txt
     #   drf-amsterdam
-djangorestframework==3.12.4
-    # via
-    #   -r ./requirements.txt
-    #   django-rest-swagger
-    #   djangorestframework-csv
-    #   djangorestframework-gis
-    #   drf-amsterdam
-    #   drf-extensions
-    #   drf-yasg
 drf-amsterdam==0.4.1
     # via -r ./requirements.txt
 drf-extensions==0.7.1
@@ -146,10 +146,10 @@ iniconfig==1.1.1
     # via pytest
 ipdb==0.13.9
     # via -r requirements_dev.in
-ipython-genutils==0.2.0
-    # via traitlets
 ipython==7.26.0
     # via ipdb
+ipython-genutils==0.2.0
+    # via traitlets
 iso8601==0.1.16
     # via
     #   -r ./requirements.txt
@@ -288,15 +288,15 @@ pyrsistent==0.18.0
     # via
     #   -r ./requirements.txt
     #   jsonschema
-pytest-cov==2.12.1
-    # via -r requirements_dev.in
-pytest-django==4.4.0
-    # via -r requirements_dev.in
 pytest==6.2.4
     # via
     #   -r requirements_dev.in
     #   pytest-cov
     #   pytest-django
+pytest-cov==2.12.1
+    # via -r requirements_dev.in
+pytest-django==4.4.0
+    # via -r requirements_dev.in
 python-dateutil==2.8.2
     # via
     #   -r ./requirements.txt
@@ -333,14 +333,14 @@ rfc3986==1.5.0
     # via
     #   -r ./requirements.txt
     #   oslo.config
-ruamel.yaml.clib==0.2.6
-    # via
-    #   -r ./requirements.txt
-    #   ruamel.yaml
 ruamel.yaml==0.17.10
     # via
     #   -r ./requirements.txt
     #   drf-yasg
+ruamel.yaml.clib==0.2.6
+    # via
+    #   -r ./requirements.txt
+    #   ruamel.yaml
 sentry-sdk==1.3.1
     # via -r ./requirements.txt
 simplejson==3.17.3
@@ -362,7 +362,7 @@ six==1.16.0
     #   python-swiftclient
     #   tox
     #   virtualenv
-sqlparse==0.4.1
+sqlparse==0.4.2
     # via
     #   -r ./requirements.txt
     #   django

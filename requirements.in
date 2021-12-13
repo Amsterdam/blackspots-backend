@@ -1,4 +1,4 @@
-django
+Django<4  # Django 4 not yet supported by djangorestframework-gis
 python-swiftclient
 python-keystoneclient
 xlrd

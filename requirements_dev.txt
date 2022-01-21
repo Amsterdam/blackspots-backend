@@ -75,18 +75,6 @@ deprecated==1.2.13
     #   jwcrypto
 distlib==0.3.4
     # via virtualenv
-django-choices==1.7.2
-    # via -r ./requirements.txt
-django-cors-headers==3.10.1
-    # via -r requirements_dev.in
-django-debug-toolbar==3.2.4
-    # via -r requirements_dev.in
-django-extensions==3.1.5
-    # via -r ./requirements.txt
-django-filter==21.1
-    # via -r ./requirements.txt
-django-rest-swagger==2.2.0
-    # via -r ./requirements.txt
 django==3.2.11
     # via
     #   -r ./requirements.txt
@@ -99,6 +87,27 @@ django==3.2.11
     #   djangorestframework
     #   drf-yasg
     #   model-bakery
+django-choices==1.7.2
+    # via -r ./requirements.txt
+django-cors-headers==3.10.1
+    # via -r requirements_dev.in
+django-debug-toolbar==3.2.4
+    # via -r requirements_dev.in
+django-extensions==3.1.5
+    # via -r ./requirements.txt
+django-filter==21.1
+    # via -r ./requirements.txt
+django-rest-swagger==2.2.0
+    # via -r ./requirements.txt
+djangorestframework==3.13.1
+    # via
+    #   -r ./requirements.txt
+    #   django-rest-swagger
+    #   djangorestframework-csv
+    #   djangorestframework-gis
+    #   drf-amsterdam
+    #   drf-extensions
+    #   drf-yasg
 djangorestframework-csv==2.1.1
     # via
     #   -r ./requirements.txt
@@ -109,15 +118,6 @@ djangorestframework-xml==2.0.0
     # via
     #   -r ./requirements.txt
     #   drf-amsterdam
-djangorestframework==3.13.1
-    # via
-    #   -r ./requirements.txt
-    #   django-rest-swagger
-    #   djangorestframework-csv
-    #   djangorestframework-gis
-    #   drf-amsterdam
-    #   drf-extensions
-    #   drf-yasg
 drf-amsterdam==0.4.1
     # via -r ./requirements.txt
 drf-extensions==0.7.1
@@ -137,9 +137,7 @@ idna==3.3
     #   -r ./requirements.txt
     #   requests
 importlib-resources==5.4.0
-    # via
-    #   -r ./requirements.txt
-    #   jsonschema
+    # via -r ./requirements.txt
 inflection==0.5.1
     # via
     #   -r ./requirements.txt
@@ -148,7 +146,7 @@ iniconfig==1.1.1
     # via pytest
 ipdb==0.13.9
     # via -r requirements_dev.in
-ipython==7.31.0
+ipython==7.31.1
     # via ipdb
 iso8601==1.0.2
     # via
@@ -288,15 +286,15 @@ pyrsistent==0.18.0
     # via
     #   -r ./requirements.txt
     #   jsonschema
-pytest-cov==3.0.0
-    # via -r requirements_dev.in
-pytest-django==4.5.2
-    # via -r requirements_dev.in
 pytest==6.2.5
     # via
     #   -r requirements_dev.in
     #   pytest-cov
     #   pytest-django
+pytest-cov==3.0.0
+    # via -r requirements_dev.in
+pytest-django==4.5.2
+    # via -r requirements_dev.in
 python-dateutil==2.8.2
     # via
     #   -r ./requirements.txt
@@ -334,14 +332,14 @@ rfc3986==2.0.0
     # via
     #   -r ./requirements.txt
     #   oslo.config
-ruamel.yaml.clib==0.2.6
-    # via
-    #   -r ./requirements.txt
-    #   ruamel.yaml
 ruamel.yaml==0.17.20
     # via
     #   -r ./requirements.txt
     #   drf-yasg
+ruamel.yaml.clib==0.2.6
+    # via
+    #   -r ./requirements.txt
+    #   ruamel.yaml
 sentry-sdk==1.5.1
     # via -r ./requirements.txt
 simplejson==3.17.6
@@ -410,9 +408,7 @@ wrapt==1.13.3
 xlrd==2.0.1
     # via -r ./requirements.txt
 zipp==3.7.0
-    # via
-    #   -r ./requirements.txt
-    #   importlib-resources
+    # via -r ./requirements.txt
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools

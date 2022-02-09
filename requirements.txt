@@ -14,7 +14,7 @@ certifi==2021.10.8
     #   sentry-sdk
 cffi==1.15.0
     # via cryptography
-charset-normalizer==2.0.10
+charset-normalizer==2.0.11
     # via requests
 coreapi==2.3.3
     # via
@@ -42,7 +42,7 @@ defusedxml==0.7.1
     # via djangorestframework-xml
 deprecated==1.2.13
     # via jwcrypto
-django==3.2.11
+django==3.2.12
     # via
     #   -r requirements.in
     #   datapunt-authorization-django
@@ -133,7 +133,7 @@ packaging==21.3
     # via
     #   drf-yasg
     #   oslo.utils
-pbr==5.8.0
+pbr==5.8.1
     # via
     #   debtcollector
     #   keystoneauth1
@@ -188,7 +188,7 @@ ruamel.yaml==0.17.20
     # via drf-yasg
 ruamel.yaml.clib==0.2.6
     # via ruamel.yaml
-sentry-sdk==1.5.3
+sentry-sdk==1.5.4
     # via -r requirements.in
 simplejson==3.17.6
     # via django-rest-swagger

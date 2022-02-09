@@ -17,7 +17,7 @@ attrs==21.4.0
     #   pytest
 backcall==0.2.0
     # via ipython
-black==21.12b0
+black==22.1.0
     # via ipython
 certifi==2021.10.8
     # via
@@ -28,7 +28,7 @@ cffi==1.15.0
     # via
     #   -r ./requirements.txt
     #   cryptography
-charset-normalizer==2.0.10
+charset-normalizer==2.0.11
     # via
     #   -r ./requirements.txt
     #   requests
@@ -45,7 +45,7 @@ coreschema==0.0.4
     #   -r ./requirements.txt
     #   coreapi
     #   drf-yasg
-coverage[toml]==6.2
+coverage[toml]==6.3.1
     # via
     #   -r requirements_dev.in
     #   pytest-cov
@@ -81,7 +81,7 @@ deprecated==1.2.13
     #   jwcrypto
 distlib==0.3.4
     # via virtualenv
-django==3.2.11
+django==3.2.12
     # via
     #   -r ./requirements.txt
     #   datapunt-authorization-django
@@ -250,7 +250,7 @@ parso==0.8.3
     # via jedi
 pathspec==0.9.0
     # via black
-pbr==5.8.0
+pbr==5.8.1
     # via
     #   -r ./requirements.txt
     #   debtcollector
@@ -273,7 +273,7 @@ pluggy==1.0.0
     # via
     #   pytest
     #   tox
-prompt-toolkit==3.0.24
+prompt-toolkit==3.0.27
     # via ipython
 psycopg2-binary==2.9.3
     # via -r ./requirements.txt
@@ -304,7 +304,7 @@ pyrsistent==0.18.1
     # via
     #   -r ./requirements.txt
     #   jsonschema
-pytest==6.2.5
+pytest==7.0.0
     # via
     #   -r requirements_dev.in
     #   pytest-cov
@@ -358,7 +358,7 @@ ruamel.yaml.clib==0.2.6
     # via
     #   -r ./requirements.txt
     #   ruamel.yaml
-sentry-sdk==1.5.3
+sentry-sdk==1.5.4
     # via -r ./requirements.txt
 simplejson==3.17.6
     # via
@@ -391,12 +391,12 @@ stevedore==3.5.0
 toml==0.10.2
     # via
     #   ipdb
-    #   pytest
     #   tox
-tomli==1.2.3
+tomli==2.0.1
     # via
     #   black
     #   coverage
+    #   pytest
 tox==3.24.5
     # via -r requirements_dev.in
 traitlets==5.1.1
@@ -419,7 +419,7 @@ urllib3==1.26.8
     #   -r ./requirements.txt
     #   requests
     #   sentry-sdk
-virtualenv==20.13.0
+virtualenv==20.13.1
     # via tox
 wcwidth==0.2.5
     # via prompt-toolkit

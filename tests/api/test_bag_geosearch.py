@@ -25,12 +25,12 @@ class TestBagGeoSearchAPI(TestCase):
                 },
                 {
                     "properties": {
-                        "code": "A",
-                        "display": "Centrum",
+                        "code": "S",
+                        "display": "Weesp",
                         "distance": 370.982213404085,
-                        "id": "03630000000018",
+                        "id": "03630930000000",
                         "type": "gebieden/stadsdeel",
-                        "uri": "https://api.data.amsterdam.nl/gebieden/stadsdeel/03630000000018/"
+                        "uri": "https://api.data.amsterdam.nl/gebieden/stadsdeel/03630930000000/"
                     }
                 },
                 {
@@ -96,7 +96,7 @@ class TestBagGeoSearchAPI(TestCase):
             "type": "FeatureCollection"
         }
         mocked_requests.get.return_value = mocked_response
-        expected_stadsdeel = Spot.Stadsdelen.Centrum
+        expected_stadsdeel = Spot.Stadsdelen.Weesp
         stadsdeel = BagGeoSearchAPI().get_stadsdeel(lat=52.370216, lon=4.895168)
         self.assertEqual(stadsdeel, expected_stadsdeel)
 

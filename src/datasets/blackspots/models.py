@@ -29,6 +29,7 @@ class Spot(models.Model):
         Nieuw_West = ChoiceItem('F')
         Zuid = ChoiceItem('K')
         Oost = ChoiceItem('M')
+        Weesp = ChoiceItem('S')
         Geen = ChoiceItem('X')
         BagFout = ChoiceItem('ERR')
 

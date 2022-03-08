@@ -19,4 +19,7 @@ def get_stadsdeel(code: str):
         'nvt': Spot.Stadsdelen.Geen,
         '': Spot.Stadsdelen.Geen,
     }
-    return stadsdeel_code_map.get(code.strip())
+    stadsdeel = stadsdeel_code_map.get(code.strip())
+    if not stadsdeel:
+        raise ValueError(f"Unexpected stadsdeel code {code}")
+    return stadsdeel

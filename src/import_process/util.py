@@ -11,6 +11,7 @@ def get_stadsdeel(code: str):
         'F': Spot.Stadsdelen.Nieuw_West,
         'K': Spot.Stadsdelen.Zuid,
         'M': Spot.Stadsdelen.Oost,
+        'S': Spot.Stadsdelen.Weesp,
         'Geen': Spot.Stadsdelen.Geen,
         'N.v.t.': Spot.Stadsdelen.Geen,
         'n.v.t.': Spot.Stadsdelen.Geen,

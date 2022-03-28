@@ -2,7 +2,6 @@
 -r ./requirements.txt
 
 # Test Libraries
-flake8<4  # see https://github.com/tholo/pytest-flake8/issues/81
 tox
 model_bakery
 isort

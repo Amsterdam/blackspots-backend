@@ -19,6 +19,10 @@ class Spot(models.Model):
         protocol_ernstig = ChoiceItem()
         protocol_dodelijk = ChoiceItem()
         risico = ChoiceItem()
+        gebiedslocatie_ivm = ChoiceItem()
+        schoolstraat = ChoiceItem()
+        vso = ChoiceItem()
+
 
     class Stadsdelen(DjangoChoices):
         Zuidoost = ChoiceItem('T')

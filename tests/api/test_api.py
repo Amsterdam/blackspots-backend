@@ -105,85 +105,67 @@ class TestAPIEndpoints(TransactionTestCase, AuthorizationSetup):
             response = client.get(url)
             self.assertStatusCode(url, response, 401)
 
-    @mock.patch("api.serializers.SpotSerializer.determine_stadsdeel")
-    def test_spot_detail_post(self, determine_stadsdeel):
-        determine_stadsdeel.return_value = Spot.Stadsdelen.Centrum
-
-        url = reverse("spot-list")
-        data = {
-            "locatie_id": "123",
-            "spot_type": Spot.SpotType.blackspot,
-            "description": "Test spot",
-            "point": '{"type": "Point","coordinates": [4.9239022,52.3875654]}',
-            "actiehouders": "Actiehouders test",
-            "status": "voorbereiding",
-            "jaar_blackspotlijst": 2019,
-        }
-        response = self.write_client.post(url, data=data)
-        self.assertStatusCode(url, response, expected_status=201)
-
-        del data["point"]
-        self.assertTrue(Spot.objects.filter(**data).exists())
 
     @mock.patch("api.serializers.SpotSerializer.determine_stadsdeel")
-    def test_spot_detail_spottype_schoolstraat_post(self, determine_stadsdeel):
-        """post a new spot using the schoolstraat spottype. expect it to be created."""
+    def test_spot_detail_spottypes_post(self, determine_stadsdeel):
         determine_stadsdeel.return_value = Spot.Stadsdelen.Centrum
-
         url = reverse("spot-list")
-        data = {
-            "locatie_id": "456",
-            "spot_type": Spot.SpotType.schoolstraat,
-            "description": "Test spot schoolstraat",
-            "point": '{"type": "Point","coordinates": [4.9239023,52.3875655]}',
-            "actiehouders": "Actiehouders test schoolstraat",
-            "status": "voorbereiding",
-        }
-        response = self.write_client.post(url, data=data)
-        self.assertStatusCode(url, response, expected_status=201)
+        #  the @pytest.mark.parametrize is not supported with unittests. The 
+        #  easiest and cleanest way is so create a list
+        #  of tuples and loop through it. The same what the parametrize 
+        #  decorator does. the tuple contains the data object but can also
+        #  contain the status code and other variables.
+        params = [
+            (
+                {
+                    "locatie_id": "123",
+                    "spot_type": Spot.SpotType.blackspot,
+                    "description": "Test spot",
+                    "point": '{"type": "Point","coordinates": [4.9239022,52.3875654]}',
+                    "actiehouders": "Actiehouders test",
+                    "status": "voorbereiding",
+                    "jaar_blackspotlijst": 2019,
+                }
+            ),
+            (
+                {
+                    "locatie_id": "456",
+                    "spot_type": Spot.SpotType.schoolstraat,
+                    "description": "Test spot schoolstraat",
+                    "point": '{"type": "Point","coordinates": [4.9239023,52.3875655]}',
+                    "actiehouders": "Actiehouders test schoolstraat",
+                    "status": "voorbereiding",
+                }
+            ),
+            (
+                {
+                    "locatie_id": "457",
+                    "spot_type": Spot.SpotType.gebiedslocatie_ivm,
+                    "description": "Test spot gebiedslocatie_ivm",
+                    "point": '{"type": "Point","coordinates": [4.9239023,52.3875655]}',
+                    "actiehouders": "Actiehouders test gebiedslocatie_ivm",
+                    "status": "voorbereiding",
+                }
+            ),
+            (
+                {
+                    "locatie_id": "458",
+                    "spot_type": Spot.SpotType.vso,
+                    "description": "Test spot vso",
+                    "point": '{"type": "Point","coordinates": [4.9239023,52.3875655]}',
+                    "actiehouders": "Actiehouders test vso",
+                    "status": "voorbereiding",                    
+                }
+            )
+        ]
 
-        del data["point"]
-        self.assertTrue(Spot.objects.filter(**data).exists())
 
-    @mock.patch("api.serializers.SpotSerializer.determine_stadsdeel")
-    def test_spot_detail_spottype_gebiedslocatie_ivm_post(self, determine_stadsdeel):
-        """post a new spot using the gebiedslocatie_ivm spottype. expect it to be created."""
-        determine_stadsdeel.return_value = Spot.Stadsdelen.Centrum
+        for data in params:
+            response = self.write_client.post(url, data=data)
+            self.assertStatusCode(url, response, expected_status=201)
 
-        url = reverse("spot-list")
-        data = {
-            "locatie_id": "457",
-            "spot_type": Spot.SpotType.gebiedslocatie_ivm,
-            "description": "Test spot gebiedslocatie_ivm",
-            "point": '{"type": "Point","coordinates": [4.9239023,52.3875655]}',
-            "actiehouders": "Actiehouders test gebiedslocatie_ivm",
-            "status": "voorbereiding",
-        }
-        response = self.write_client.post(url, data=data)
-        self.assertStatusCode(url, response, expected_status=201)
-
-        del data["point"]
-        self.assertTrue(Spot.objects.filter(**data).exists())
-
-    @mock.patch("api.serializers.SpotSerializer.determine_stadsdeel")
-    def test_spot_detail_spottype_vso_post(self, determine_stadsdeel):
-        """post a new spot using the vso spottype. expect it to be created."""
-        determine_stadsdeel.return_value = Spot.Stadsdelen.Centrum
-
-        url = reverse("spot-list")
-        data = {
-            "locatie_id": "458",
-            "spot_type": Spot.SpotType.vso,
-            "description": "Test spot vso",
-            "point": '{"type": "Point","coordinates": [4.9239023,52.3875655]}',
-            "actiehouders": "Actiehouders test vso",
-            "status": "voorbereiding",
-        }
-        response = self.write_client.post(url, data=data)
-        self.assertStatusCode(url, response, expected_status=201)
-
-        del data["point"]
-        self.assertTrue(Spot.objects.filter(**data).exists())
+            del data["point"]
+            self.assertTrue(Spot.objects.filter(**data).exists())
 
     @mock.patch("api.serializers.SpotSerializer.determine_stadsdeel")
     def test_spot_detail_post_auth_error(self, determine_stadsdeel):

@@ -19,9 +19,9 @@ class Spot(models.Model):
         protocol_ernstig = ChoiceItem()
         protocol_dodelijk = ChoiceItem()
         risico = ChoiceItem()
-        gebiedslocatie_ivm = ChoiceItem()
+        gebiedslocatie_ivm = ChoiceItem()  # infrastructurele verkeersveiligheidsmaatregel
         schoolstraat = ChoiceItem()
-        vso = ChoiceItem()
+        vso = ChoiceItem()  # veilige schoolomgeving
 
 
     class Stadsdelen(DjangoChoices):

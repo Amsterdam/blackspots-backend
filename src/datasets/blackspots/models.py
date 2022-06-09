@@ -18,7 +18,7 @@ class Spot(models.Model):
         wegvak = ChoiceItem()
         protocol_ernstig = ChoiceItem()
         protocol_dodelijk = ChoiceItem()
-        risico = ChoiceItem()
+        risicolocatie_ivm = ChoiceItem()
         gebiedslocatie_ivm = ChoiceItem()  # infrastructurele verkeersveiligheidsmaatregel
         schoolstraat = ChoiceItem()
         vso = ChoiceItem()  # veilige schoolomgeving

@@ -165,7 +165,7 @@ class TestSpotSerializers(TestCase):
             self.assertEqual(attrs['jaar_blackspotlijst'], None)
 
     def test_validate_spot_types_unset_both(self):
-        for spot_type in [Spot.SpotType.risico]:
+        for spot_type in [Spot.SpotType.risicolocatie_ivm]:
             attrs = {'spot_type': spot_type}
             self.serializer.validate_spot_types(attrs)
             self.assertEqual(attrs['jaar_blackspotlijst'], None)

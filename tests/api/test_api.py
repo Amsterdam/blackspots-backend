@@ -198,7 +198,7 @@ class TestAPIEndpoints(TransactionTestCase, AuthorizationSetup):
         url = reverse("spot-detail", [created_spot.id])
         new_data = {
             "locatie_id": locatie_id,
-            "spot_type": Spot.SpotType.risico,
+            "spot_type": Spot.SpotType.risicolocatie_ivm,
             "description": "TEST PUT 2",
             "point": '{"type": "Point","coordinates": [567, 789]}',
             "actiehouders": "PUT actiehouders 2",
@@ -233,7 +233,7 @@ class TestAPIEndpoints(TransactionTestCase, AuthorizationSetup):
         for client in [self.anon_client, self.read_client]:
             new_data = {
                 "locatie_id": locatie_id,
-                "spot_type": Spot.SpotType.risico,
+                "spot_type": Spot.SpotType.risicolocatie_ivm,
                 "description": "TEST PUT 2",
                 "point": '{"type": "Point","coordinates": [567, 789]}',
                 "actiehouders": "PUT actiehouders 2",

@@ -253,6 +253,7 @@ class SpotCSVSerializer(ModelSerializer):
             'jaar_blackspotlijst',
             'jaar_ongeval_quickscan',
             'jaar_oplevering',
+            'jaar_opgenomen_in_ivm_lijst',
             'aantekeningen',
             'latitude',
             'longitude',

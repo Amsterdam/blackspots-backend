@@ -93,7 +93,7 @@ def get_spot_type(abbreviation):
         'BW': Spot.SpotType.wegvak,
         'QD': Spot.SpotType.protocol_dodelijk,
         'QE': Spot.SpotType.protocol_ernstig,
-        'R': Spot.SpotType.risico,
+        'R': Spot.SpotType.risicolocatie_ivm,
     }
     key = abbreviation.strip()
     if key == 'Q' or key == 'QSNP':
@@ -129,7 +129,7 @@ def get_stadsdeel(name: str):
     return value
 
 
-def get_wegvak(input: str):
+def get_polygoon(input: str):
     if input:
         data = json.loads(input)
         return LineString(data)
@@ -170,7 +170,7 @@ def process_xls(xls_path, document_list: DocumentList):
             log_error(f"Unknown point: {latitude}, {longitude}: \"{e}\", skipping")
             continue
 
-        wegvak = get_wegvak(get_sheet_cell(sheet, 'wegvak', row_idx))
+        polygoon = get_polygoon(get_sheet_cell(sheet, 'polygoon', row_idx))
 
         stadsdeel = get_stadsdeel(get_sheet_cell(sheet, 'stadsdeel', row_idx))
 
@@ -188,7 +188,7 @@ def process_xls(xls_path, document_list: DocumentList):
             "spot_type": spot_type,
             "description": get_sheet_cell(sheet, 'description', row_idx),
             "point": point,
-            "wegvak": wegvak,
+            "polygoon": polygoon,
             "stadsdeel": stadsdeel,
             "status": status,
 

@@ -60,6 +60,7 @@ class Spot(models.Model):
     jaar_blackspotlijst = models.IntegerField(null=True, blank=True)
     jaar_ongeval_quickscan = models.IntegerField(null=True, blank=True)
     jaar_oplevering = models.IntegerField(null=True, blank=True)
+    jaar_opgenomen_in_ivm_lijst = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
         return f'{self.locatie_id}: {self.spot_type}'

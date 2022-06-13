@@ -122,6 +122,7 @@ class TestAPIEndpoints(TransactionTestCase, AuthorizationSetup):
             "point": '{"type": "Point","coordinates": [4.9239022,52.3875654]}',
             "actiehouders": "Actiehouders test",
             "status": "voorbereiding",
+            "jaar_opgenomen_in_ivm_lijst": 2022
         }
 
         if spot_type in [Spot.SpotType.blackspot, Spot.SpotType.wegvak]:

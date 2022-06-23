@@ -119,7 +119,12 @@ class TestAPIEndpoints(TransactionTestCase, AuthorizationSetup):
             "locatie_id": random.randint(1, 999999),
             "spot_type": spot_type,
             "description": "Test spot",
-            "point": '{"type": "Point","coordinates": [4.9239022,52.3875654]}',
+            # note there are quite a lot of spaces inside the point and polygoon
+            # values. That is so we can directly compare it to the json rendered
+            # values we get from Django.
+            "point": '{ "type": "Point", "coordinates": [ 4.9239022, 52.3875654 ] }',
+            "polygoon": '{ "type": "LineString", "coordinates": [ [ 52.3689977, 4.8780082 ], '
+            '[ 52.368998, 4.8779635 ], [ 52.3693862, 4.8776962 ], [ 52.3694042, 4.877723 ] ] }',
             "actiehouders": "Actiehouders test",
             "status": "voorbereiding",
             "jaar_opgenomen_in_ivm_lijst": 2022
@@ -132,6 +137,11 @@ class TestAPIEndpoints(TransactionTestCase, AuthorizationSetup):
 
         response = self.write_client.post(url, data=data)
         self.assertStatusCode(url, response, expected_status=201)
+
+        spot = Spot.objects.get(locatie_id=data['locatie_id'])
+        assert spot.spot_type == data['spot_type']
+        assert spot.polygoon.json == data['polygoon']
+        assert spot.point.json == data['point']
 
     @mock.patch("api.serializers.SpotSerializer.determine_stadsdeel")
     def test_spot_detail_post_auth_error(self, determine_stadsdeel):

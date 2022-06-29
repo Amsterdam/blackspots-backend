@@ -3,12 +3,13 @@ import logging
 import six
 from datapunt_api.rest import HALSerializer
 from django.conf import settings
+from django.contrib.gis.geos import Point, Polygon
 from django.db import models
 from django.db.models import query
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
-from rest_framework_gis.serializers import GeoFeatureModelSerializer
+from rest_framework_gis.serializers import GeoFeatureModelSerializer, GeometrySerializerMethodField
 
 from api.bag_geosearch import BagGeoSearchAPI
 from datasets.blackspots.models import Document, Spot
@@ -42,10 +43,18 @@ class SpotGeojsonSerializer(GeoFeatureModelSerializer):
     stadsdeel = serializers.CharField(source='get_stadsdeel_display', read_only=True)
     documents = SpotDocumentSerializer(many=True, read_only=True)
 
+    point_or_polygoon = GeometrySerializerMethodField()
+
+    def get_point_or_polygoon(self, obj):
+        if obj.polygoon is not None:
+            return Polygon(obj.polygoon.coords)
+        else:
+            return Point(obj.point.coords)
+
     class Meta(object):
         model = Spot
         fields = '__all__'
-        geo_field = 'point'
+        geo_field = 'point_or_polygoon'
 
         # Detail url is constructed using location_id instead of pk,
         # see: https://www.django-rest-framework.org/api-guide/serializers/#how-hyperlinked-views-are-determined # noqa: 501

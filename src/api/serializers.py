@@ -48,8 +48,10 @@ class SpotGeojsonSerializer(GeoFeatureModelSerializer):
     def get_point_or_polygoon(self, obj):
         if obj.polygoon is not None:
             return Polygon(obj.polygoon.coords[0])
-        else:
+        elif obj.point is not None:
             return Point(obj.point.coords)
+        else:
+            return None
 
     class Meta(object):
         model = Spot

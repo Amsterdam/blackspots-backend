@@ -123,8 +123,8 @@ class TestAPIEndpoints(TransactionTestCase, AuthorizationSetup):
             # values. That is so we can directly compare it to the json rendered
             # values we get from Django.
             "point": '{ "type": "Point", "coordinates": [ 4.9239022, 52.3875654 ] }',
-            "polygoon": '{ "type": "Polygon", "coordinates": [ [ 52.3689977, 4.8780082 ], '
-            '[ 52.368998, 4.8779635 ], [ 52.3693862, 4.8776962 ], [ 52.3694042, 4.877723 ], [ 52.3689977, 4.8780082 ] ] }',
+            "polygoon": '{ "type": "Polygon", "coordinates": [ [ [ 52.3689977, 4.8780082 ], '
+            '[ 52.368998, 4.8779635 ], [ 52.3693862, 4.8776962 ], [ 52.3694042, 4.877723 ], [ 52.3689977, 4.8780082 ] ] ] }',
             "actiehouders": "Actiehouders test",
             "status": "voorbereiding",
             "jaar_opgenomen_in_ivm_lijst": 2022

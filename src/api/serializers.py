@@ -3,12 +3,14 @@ import logging
 import six
 from datapunt_api.rest import HALSerializer
 from django.conf import settings
+from django.contrib.gis.geos import Point, Polygon
 from django.db import models
 from django.db.models import query
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
-from rest_framework_gis.serializers import GeoFeatureModelSerializer
+from rest_framework_gis.serializers import GeoFeatureModelSerializer, \
+    GeometrySerializerMethodField
 
 from api.bag_geosearch import BagGeoSearchAPI
 from datasets.blackspots.models import Document, Spot
@@ -42,10 +44,20 @@ class SpotGeojsonSerializer(GeoFeatureModelSerializer):
     stadsdeel = serializers.CharField(source='get_stadsdeel_display', read_only=True)
     documents = SpotDocumentSerializer(many=True, read_only=True)
 
+    point_or_polygoon = GeometrySerializerMethodField()
+
+    def get_point_or_polygoon(self, obj):
+        if obj.polygoon is not None:
+            return Polygon(obj.polygoon.coords[0])
+        elif obj.point is not None:
+            return Point(obj.point.coords)
+        else:
+            return None
+
     class Meta(object):
         model = Spot
         fields = '__all__'
-        geo_field = 'point'
+        geo_field = 'point_or_polygoon'
 
         # Detail url is constructed using location_id instead of pk,
         # see: https://www.django-rest-framework.org/api-guide/serializers/#how-hyperlinked-views-are-determined # noqa: 501
@@ -77,7 +89,8 @@ class SpotSerializer(HALSerializer):
         attrs = super().validate(attrs)
 
         self.validate_spot_types(attrs)
-        self.validate_point_stadsdeel(attrs)
+        self.validate_point_or_polygoon(attrs)
+        self.validate_geo_stadsdeel(attrs)
 
         return attrs
 
@@ -108,10 +121,46 @@ class SpotSerializer(HALSerializer):
             # note that by setting the attribute to None, it will be emptied in the db.
             attrs['jaar_ongeval_quickscan'] = None
 
-    def validate_point_stadsdeel(self, attrs):
+    def validate_point_or_polygoon(self, attrs):
+        spot_type = attrs.get('spot_type')
+        if not spot_type:
+            # if we can't determine spot_type, we can't validate (this happens during patch)
+            return
+
+        if spot_type in [
+            Spot.SpotType.blackspot,
+            Spot.SpotType.protocol_dodelijk,
+            Spot.SpotType.protocol_ernstig]:
+            # spot must always have a coordinate (point)
+            if not attrs.get('point'):
+                raise serializers.ValidationError({'point': [_("This spot type requires a point.")]})
+
+            # empty polygoon because its a point type
+            attrs['polygoon'] = None
+        elif spot_type == Spot.SpotType.wegvak:
+            # wegvak (red route) must always have a polygon
+            if not attrs.get('polygoon'):
+                raise serializers.ValidationError({'polygoon': [_("This spot type requires a polygon.")]})
+
+            # empty point because its a polygon type
+            attrs['point'] = None
+        else:
+            # other spot types can either be polygon or point, but exactly one of them must be filled
+            if not attrs.get('polygoon') and not attrs.get('point'):
+                raise serializers.ValidationError(
+                    {'point': [_("This spot type requires either a point or polygon.")]},
+                    {'polygoon': [_("This spot type requires either a point or polygon.")]},
+                )
+
+    def validate_geo_stadsdeel(self, attrs):
+        # determine stadsdeel from point/poly if its unknown
         stadsdeel = attrs.get('stadsdeel')
         point = attrs.get('point')
-        if point and not stadsdeel:
+        polygon = attrs.get('polygon')
+        if (point or polygon) and not stadsdeel:
+            if not point:
+                point = polygon[0][0]
+
             # only do a stadsdeel lookup if we did not get it from the request
             stadsdeel = self.determine_stadsdeel(point)
             if stadsdeel == Spot.Stadsdelen.Geen:

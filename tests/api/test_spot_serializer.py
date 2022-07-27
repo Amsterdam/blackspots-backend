@@ -1,6 +1,6 @@
 from unittest import TestCase, mock
 
-from django.contrib.gis.geos import Point
+from django.contrib.gis.geos import Point, Polygon
 from django.utils.translation import gettext_lazy as _
 from rest_framework.exceptions import ValidationError
 
@@ -61,15 +61,26 @@ class TestSpotSerializers(TestCase):
 
     def test_jaar_blackspotlijst_validation_success(self):
         for spot_type in [Spot.SpotType.blackspot, Spot.SpotType.wegvak]:
-            attrs = {'spot_type': spot_type, 'jaar_blackspotlijst': 2019}
+            attrs = {
+                'spot_type': spot_type,
+                'jaar_blackspotlijst': 2019,
+                'point': Point(x=4.9239022, y=52.3875654),
+                'polygoon': Polygon(((52.3689977, 4.8780082), (52.368998, 4.8779635), (52.3693862, 4.8776962), (52.3694042, 4.877723), (52.3689977, 4.8780082))),
+            }
             self.serializer.validate(attrs)
             # no errors expected
 
     def test_jaar_ongeval_quickscan_validation_success(self):
         for spot_type in [Spot.SpotType.protocol_ernstig, Spot.SpotType.protocol_dodelijk]:
-            attrs = {'spot_type': spot_type, 'jaar_ongeval_quickscan': 2019}
+            # note that the validate receives already processed data, no raw json
+            attrs = {
+                'spot_type': spot_type,
+                'jaar_ongeval_quickscan': 2019,
+                'point': Point(x=4.9239022, y=52.3875654),
+            }
             self.serializer.validate(attrs)
             # no errors expected
+
 
     @mock.patch('api.serializers.SpotSerializer.determine_stadsdeel')
     def test_coordinate_outside_amsterdam(self, determine_stadsdeel):
@@ -98,7 +109,13 @@ class TestSpotSerializers(TestCase):
     def test_jaar_blackspotlijst_none(self):
         # Assert that the jaar_blackspotlijst property is changed to None
         for spot_type in [Spot.SpotType.protocol_ernstig, Spot.SpotType.protocol_dodelijk]:
-            attrs = {'spot_type': spot_type, 'jaar_ongeval_quickscan': 2019, 'jaar_blackspotlijst': 2020}
+            attrs = {
+                'spot_type': spot_type,
+                'jaar_ongeval_quickscan': 2019,
+                'jaar_blackspotlijst': 2020,
+                'point': Point(x=4.9239022, y=52.3875654),
+            }
+
             self.serializer.validate(attrs)
             self.assertIn('jaar_blackspotlijst', attrs)
             self.assertEqual(attrs['jaar_blackspotlijst'], None)
@@ -106,7 +123,13 @@ class TestSpotSerializers(TestCase):
     def test_jaar_ongeval_quickscan_none(self):
         # Assert that the jaar_ongeval_quickscan property is changed to None
         for spot_type in [Spot.SpotType.blackspot, Spot.SpotType.wegvak]:
-            attrs = {'spot_type': spot_type, 'jaar_blackspotlijst': 2019, 'jaar_ongeval_quickscan': 2020}
+            attrs = {
+                'spot_type': spot_type,
+                'jaar_blackspotlijst': 2019,
+                'jaar_ongeval_quickscan': 2020,
+                'point': Point(x=4.9239022, y=52.3875654),
+                'polygoon': Polygon(((52.3689977, 4.8780082), (52.368998, 4.8779635), (52.3693862, 4.8776962), (52.3694042, 4.877723), (52.3689977, 4.8780082))),
+            }
             self.serializer.validate(attrs)
             self.assertIn('jaar_ongeval_quickscan', attrs)
             self.assertEqual(attrs['jaar_ongeval_quickscan'], None)
@@ -114,7 +137,11 @@ class TestSpotSerializers(TestCase):
     def test_jaar_blackspotlijst_missing_none(self):
         # Assert that the jaar_blackspotlijst property is added and set to None
         for spot_type in [Spot.SpotType.protocol_ernstig, Spot.SpotType.protocol_dodelijk]:
-            attrs = {'spot_type': spot_type, 'jaar_ongeval_quickscan': 2019}
+            attrs = {
+                'spot_type': spot_type,
+                'jaar_ongeval_quickscan': 2019,
+                'point': Point(x=4.9239022, y=52.3875654),
+            }
             self.serializer.validate(attrs)
             self.assertIn('jaar_blackspotlijst', attrs)
             self.assertEqual(attrs['jaar_blackspotlijst'], None)
@@ -122,7 +149,12 @@ class TestSpotSerializers(TestCase):
     def test_jaar_ongeval_quickscan_missing_none(self):
         # Assert that the jaar_ongeval_quickscan property is added and set to None
         for spot_type in [Spot.SpotType.blackspot, Spot.SpotType.wegvak]:
-            attrs = {'spot_type': spot_type, 'jaar_blackspotlijst': 2019}
+            attrs = {
+                'spot_type': spot_type,
+                 'jaar_blackspotlijst': 2019,
+                'point': Point(x=4.9239022, y=52.3875654),
+                'polygoon': Polygon(((52.3689977, 4.8780082), (52.368998, 4.8779635), (52.3693862, 4.8776962), (52.3694042, 4.877723), (52.3689977, 4.8780082))),
+            }
             self.serializer.validate(attrs)
             self.assertIn('jaar_ongeval_quickscan', attrs)
             self.assertEqual(attrs['jaar_ongeval_quickscan'], None)

@@ -26,7 +26,9 @@ class TestAPIEndpoints(TransactionTestCase, AuthorizationSetup):
 
         # generate 3 spots with locatie_ids test_1, test_2 and test_3
         baker.prepare(Document)  # because of this line the next bakery will work
-        baker.make(Spot, locatie_id=seq("test_"), actiehouders="Unknown", _quantity=3)
+        baker.make(
+            Spot, locatie_id=seq("test_"), actiehouders="Unknown", _quantity=3, _fill_optional=['polygoon', 'point']
+        )
         self.spot_with_docs = baker.make(Spot)
         baker.make(Document, spot=self.spot_with_docs, _quantity=3)
 
@@ -123,8 +125,8 @@ class TestAPIEndpoints(TransactionTestCase, AuthorizationSetup):
             # values. That is so we can directly compare it to the json rendered
             # values we get from Django.
             "point": '{ "type": "Point", "coordinates": [ 4.9239022, 52.3875654 ] }',
-            "polygoon": '{ "type": "LineString", "coordinates": [ [ 52.3689977, 4.8780082 ], '
-            '[ 52.368998, 4.8779635 ], [ 52.3693862, 4.8776962 ], [ 52.3694042, 4.877723 ] ] }',
+            "polygoon": '{ "type": "Polygon", "coordinates": [ [ [ 52.3689977, 4.8780082 ], '
+            '[ 52.368998, 4.8779635 ], [ 52.3693862, 4.8776962 ], [ 52.3694042, 4.877723 ], [ 52.3689977, 4.8780082 ] ] ] }',
             "actiehouders": "Actiehouders test",
             "status": "voorbereiding",
             "jaar_opgenomen_in_ivm_lijst": 2022
@@ -140,8 +142,21 @@ class TestAPIEndpoints(TransactionTestCase, AuthorizationSetup):
 
         spot = Spot.objects.get(locatie_id=data['locatie_id'])
         assert spot.spot_type == data['spot_type']
-        assert spot.polygoon.json == data['polygoon']
-        assert spot.point.json == data['point']
+
+        # check point or polygon base on spot type
+        if spot_type and spot_type in [
+            Spot.SpotType.blackspot,
+            Spot.SpotType.protocol_dodelijk,
+            Spot.SpotType.protocol_ernstig]:
+            assert spot.point.json == data['point']
+        elif spot_type == Spot.SpotType.wegvak:
+            assert spot.polygoon.json == data['polygoon']
+        else:
+            if spot.polygoon:
+                assert spot.polygoon.json == data['polygoon']
+            else:
+                assert spot.point.json == data['point']
+
 
     @mock.patch("api.serializers.SpotSerializer.determine_stadsdeel")
     def test_spot_detail_post_auth_error(self, determine_stadsdeel):

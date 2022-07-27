@@ -40,8 +40,8 @@ class Spot(models.Model):
     locatie_id = models.CharField(unique=True, max_length=16)
     spot_type = models.CharField(max_length=24, choices=SpotType.choices)
     description = models.CharField(max_length=120)
-    point = models.PointField(srid=4326)
-    polygoon = models.LineStringField(srid=4326, null=True, blank=True)
+    point = models.PointField(srid=4326, null=True, blank=True)
+    polygoon = models.PolygonField(srid=4326, null=True, blank=True)
 
     stadsdeel = models.CharField(max_length=3, choices=Stadsdelen.choices)
 

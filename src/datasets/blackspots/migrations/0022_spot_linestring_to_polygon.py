@@ -6,7 +6,7 @@ from django.contrib.gis.geos import Polygon
 
 
 def line_string_to_polygon(apps, schema_editor):
-    Spot = apps.get_model('Spot')
+    Spot = apps.get_model('blackspots', 'Spot')
     for spot in Spot.objects.all():
         if spot.polygoon is not None:
             spot._polygoon = Polygon((*spot.polygoon, spot.polygoon[0]))
@@ -16,7 +16,7 @@ def line_string_to_polygon(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('blackspots', '0020_alter_spot_point_nullable'),
+        ('blackspots', '0021_spot_point_nullable'),
     ]
 
     operations = [

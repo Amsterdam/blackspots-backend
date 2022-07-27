@@ -16,9 +16,4 @@ class Migration(migrations.Migration):
             name='point',
             field=django.contrib.gis.db.models.fields.PointField(blank=True, null=True, srid=4326),
         ),
-        migrations.AlterField(
-            model_name='spot',
-            name='polygoon',
-            field=django.contrib.gis.db.models.fields.PolygonField(blank=True, null=True, srid=4326),
-        ),
     ]

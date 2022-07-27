@@ -286,3 +286,5 @@ if DEBUG:
         "debug_toolbar.panels.redirects.RedirectsPanel",
         "debug_toolbar.panels.profiling.ProfilingPanel",
     ]
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'

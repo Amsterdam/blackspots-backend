@@ -1,5 +1,6 @@
 import logging
 import os
+from typing import Optional
 
 from django.conf import settings
 from django.core.management.base import BaseCommand
@@ -16,26 +17,40 @@ log = logging.getLogger(__name__)
 class Command(BaseCommand):
     help = 'Import blackspots from objectstore'
 
+    def add_arguments(self, parser):
+        # useful for local testing / debugging
+        parser.add_argument('xls_path', type=str, default=None)
+        parser.add_argument('--keep-existing', action='store_true')
+
     def handle(self, *args, **options):
-        assert os.getenv('OBJECTSTORE_PASSWORD')
-        perform_import()
+        if not (xls_path := options.get('xls_path')):
+            assert os.getenv('OBJECTSTORE_PASSWORD')
+        perform_import(xls_path, options['keep_existing'])
 
 
-def perform_import():
-    log.info('Clearing models')
-    clear_models()
+def perform_import(xls_path: Optional[str], keep_existing: bool):
+    """
+    :param xls_path: path to the file to process, if None will be downloaded
+                     from the object store.
+    """
+    if keep_existing:
+        log.info('Clearing models')
+        clear_models()
 
-    objstore = ObjectStore(config=settings.OBJECTSTORE_CONNECTION_CONFIG)
+    document_list = None
+    if xls_path is None:
+        objstore = ObjectStore(config=settings.OBJECTSTORE_CONNECTION_CONFIG)
 
-    log.info('Opening object store connection')
-    connection = objstore.get_connection()
+        log.info('Opening object store connection')
+        connection = objstore.get_connection()
 
-    log.info('Getting documents list')
-    document_list = objstore.get_wba_documents_list(connection)
-    log.info(f'document list size: {len(document_list)}')
+        log.info('Getting documents list')
+        document_list = objstore.get_wba_documents_list(connection)
+        log.info(f'document list size: {len(document_list)}')
 
-    log.info('Fetching xls file')
-    xls_path = objstore.fetch_spots(connection)
+        log.info('Fetching xls file')
+        xls_path = objstore.fetch_spots(connection)
+
     log.info('Importing xls file')
     process_xls(xls_path, document_list)
 

@@ -148,7 +148,7 @@ def create_document(
         filename: str,
         spot: Spot
 ):
-    if not filename or len(filename) == 0:
+    if not filename or len(filename) == 0 or not document_list:
         return
 
     available_filenames = [filename for [_, filename] in document_list]
@@ -159,7 +159,7 @@ def create_document(
     Document.objects.create(type=doc_type, filename=filename, spot=spot)
 
 
-def process_xls(xls_path, document_list: DocumentList):
+def process_xls(xls_path, document_list: Optional[DocumentList]):
     book = open_workbook(xls_path)
 
     sheet = book.sheet_by_index(0)

@@ -1,8 +1,10 @@
 import json
 import logging
+from ast import literal_eval
+from typing import Optional
 
 import xlrd
-from django.contrib.gis.geos import LineString, Point
+from django.contrib.gis.geos import Polygon, Point
 from xlrd import open_workbook
 
 from datasets.blackspots.models import Document, Spot
@@ -131,8 +133,11 @@ def get_stadsdeel(name: str):
 
 def get_polygoon(input: str):
     if input:
-        data = json.loads(input)
-        return LineString(data)
+        data = list(literal_eval(input))
+        # ensure polygon is closed
+        if data[-1] != data[0]:
+            data.append(data[0])
+        return Polygon(data)
     return None
 
 

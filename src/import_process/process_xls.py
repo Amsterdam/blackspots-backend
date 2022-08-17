@@ -14,24 +14,25 @@ from storage.objectstore import DocumentList
 log = logging.getLogger(__name__)
 
 EXCEL_STRUCTURE = {
-    'number':               {'column_idx': 0, 'header': 'Nummer'},
-    'description':          {'column_idx': 1, 'header': 'Locatie omschrijving'},
-    'type':                 {'column_idx': 2, 'header': ''},  # Type
-    'lat':                  {'column_idx': 3, 'header': 'Lat'},
-    'lng':                  {'column_idx': 4, 'header': 'Long'},
-    'polygoon':             {'column_idx': 5, 'header': 'Red Route'},  # was wegvak
-    'stadsdeel':            {'column_idx': 6, 'header': 'Stadsdeel'},
-    'status':               {'column_idx': 7, 'header': 'Status'},
-    'actiehouders':         {'column_idx': 8, 'header': 'Actiehouders'},
-    'tasks':                {'column_idx': 9, 'header': 'Taken'},
-    'start_uitvoering':     {'column_idx': 10, 'header': 'Start uitvoering'},
-    'eind_uitvoering':      {'column_idx': 11, 'header': 'Eind uitvoering'},
-    'jaar_blackspot':       {'column_idx': 12, 'header': 'Jaar Blackspotlijst'},
-    'jaar_quickscan':       {'column_idx': 13, 'header': 'Jaar ongeval quickscan rapportage'},
-    'jaar_oplevering':      {'column_idx': 14, 'header': 'Jaar oplevering'},
-    'notes':                {'column_idx': 15, 'header': 'Opmerkingen'},
-    'rapportage':           {'column_idx': 16, 'header': 'Rapportage'},
-    'ontwerp':              {'column_idx': 17, 'header': 'Verkeersontwerp'},
+    'number':                       {'column_idx': 0, 'header': 'Nummer'},
+    'description':                  {'column_idx': 1, 'header': 'Locatie omschrijving'},
+    'type':                         {'column_idx': 2, 'header': ''},  # Type
+    'lat':                          {'column_idx': 3, 'header': 'Lat'},
+    'lng':                          {'column_idx': 4, 'header': 'Long'},
+    'wegvak':                       {'column_idx': 5, 'header': 'Wegvak'},  # was wegvak
+    'stadsdeel':                    {'column_idx': 6, 'header': 'Stadsdeel'},
+    'status':                       {'column_idx': 7, 'header': 'Status'},
+    'actiehouders':                 {'column_idx': 8, 'header': 'Actiehouders'},
+    'tasks':                        {'column_idx': 9, 'header': 'Taken'},
+    'start_uitvoering':             {'column_idx': 10, 'header': 'Start uitvoering'},
+    'eind_uitvoering':              {'column_idx': 11, 'header': 'Eind uitvoering'},
+    'jaar_blackspot':               {'column_idx': 12, 'header': 'Jaar Blackspotlijst'},
+    'jaar_quickscan':               {'column_idx': 13, 'header': 'Jaar ongeval quickscan rapportage'},
+    'jaar_opgenomen_in_ivm_lijst':  {'column_idx': 14, 'header': 'Jaar opgenomen in IVM lijst'},
+    'jaar_oplevering':              {'column_idx': 15, 'header': 'Jaar oplevering'},
+    'notes':                        {'column_idx': 16, 'header': 'Opmerkingen'},
+    'rapportage':                   {'column_idx': 17, 'header': 'Rapportage'},
+    'ontwerp':                      {'column_idx': 18, 'header': 'Verkeersontwerp'},
 }
 
 
@@ -166,16 +167,22 @@ def process_xls(xls_path, document_list: DocumentList):
     check_column_names(sheet)
 
     for row_idx in range(1, sheet.nrows):
+
+        # one of point or wegvaks should be present
         latitude = get_sheet_cell(sheet, 'lat', row_idx)
         longitude = get_sheet_cell(sheet, 'lng', row_idx)
+        wegvak = get_sheet_cell(sheet, 'wegvak', row_idx)
+
+        point, polygoon = None, None
         try:
             point = Point(longitude, latitude)
-        except TypeError as e:
-            # TODO raise exception
-            log_error(f"Unknown point: {latitude}, {longitude}: \"{e}\", skipping")
-            continue
-
-        polygoon = get_polygoon(get_sheet_cell(sheet, 'polygoon', row_idx))
+        except Exception as point_e:
+            try:
+                polygoon = get_polygoon(wegvak)
+            except Exception as polygoon_e:
+                log_error(f"Unknown point/wegvak: {latitude}, {longitude} : "
+                          f" \"{point_e}\", {wegvak}: \"{polygoon_e}\", skipping")
+                continue
 
         stadsdeel = get_stadsdeel(get_sheet_cell(sheet, 'stadsdeel', row_idx))
 
@@ -205,6 +212,10 @@ def process_xls(xls_path, document_list: DocumentList):
             "jaar_blackspotlijst": jaar_blackspotlijst,
             "jaar_ongeval_quickscan": jaar_quickscan,
             "jaar_oplevering": get_integer(get_sheet_cell(sheet, 'jaar_oplevering', row_idx), 'oplevering'),
+            "jaar_opgenomen_in_ivm_lijst": get_integer(
+                get_sheet_cell(sheet, 'jaar_opgenomen_in_ivm_lijst', row_idx),
+                'jaar_opgenomen_in_ivm_lijst'
+            ),
         }
 
         [spot, _] = Spot.objects.get_or_create(**spot_data)

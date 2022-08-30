@@ -33,7 +33,7 @@ def perform_import(xls_path: Optional[str], keep_existing: bool):
     :param xls_path: path to the file to process, if None will be downloaded
                      from the object store.
     """
-    if keep_existing:
+    if not keep_existing:
         log.info('Clearing models')
         clear_models()
 

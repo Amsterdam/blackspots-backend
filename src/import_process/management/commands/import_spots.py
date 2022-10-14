@@ -19,7 +19,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         # useful for local testing / debugging
-        parser.add_argument('xls_path', type=str, default=None)
+        parser.add_argument('--xls_path', type=str, default=None)
         parser.add_argument('--keep-existing', action='store_true')
 
     def handle(self, *args, **options):

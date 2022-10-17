@@ -31,8 +31,8 @@ class TestDocumentProxy(TestCase, AuthorizationSetup):
         self.assertEqual(models.Spot.objects.count(), 1)
         self.assertEqual(models.Document.objects.count(), 1)
 
-    @patch('storage.objectstore.ObjectStore.get_connection')
-    @patch('storage.objectstore.ObjectStore.get_document')
+    @patch('storage.object_store.ObjectStore.get_connection')
+    @patch('storage.object_store.ObjectStore.get_document')
     def test_get_document(self, get_mock, connection_mock):
         connection_mock.return_value = 'connection_object'
         get_mock.return_value = [
@@ -48,8 +48,8 @@ class TestDocumentProxy(TestCase, AuthorizationSetup):
         self.assertEqual('application/pdf', response['Content-Type'])
         self.assertEqual(response.content, b'blob')
 
-    @patch('storage.objectstore.ObjectStore.get_connection')
-    @patch('storage.objectstore.ObjectStore.get_document')
+    @patch('storage.object_store.ObjectStore.get_connection')
+    @patch('storage.object_store.ObjectStore.get_document')
     def test_document_object_does_not_exist(self, get_mock, connection_mock):
         connection_mock.return_value = 'connection_object'
         get_mock.return_value = 'dontcare'
@@ -59,8 +59,8 @@ class TestDocumentProxy(TestCase, AuthorizationSetup):
 
         self.assertEqual(404, response.status_code)
 
-    @patch('storage.objectstore.ObjectStore.get_connection')
-    @patch('storage.objectstore.ObjectStore.get_document')
+    @patch('storage.object_store.ObjectStore.get_connection')
+    @patch('storage.object_store.ObjectStore.get_document')
     def test_objectstore_auth_error(self, get_mock, connection_mock):
         connection_mock.return_value = 'connection_object'
         get_mock.return_value = 'dontcare'
@@ -70,8 +70,8 @@ class TestDocumentProxy(TestCase, AuthorizationSetup):
 
         self.assertEqual(500, response.status_code)
 
-    @patch('storage.objectstore.ObjectStore.get_connection')
-    @patch('storage.objectstore.ObjectStore.get_document')
+    @patch('storage.object_store.ObjectStore.get_connection')
+    @patch('storage.object_store.ObjectStore.get_document')
     def test_fail_other_client_exception(self, get_mock, connection_mock):
         connection_mock.return_value = 'connection_object'
         get_mock.return_value = 'dontcare'

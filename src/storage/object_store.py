@@ -3,7 +3,7 @@ import os
 from typing import List, Tuple
 
 from django.conf import settings
-from objectstore import get_full_container_list, objectstore
+from objectstore import get_full_container_list, get_connection
 from swiftclient import ClientException
 
 from datasets.blackspots.models import Document
@@ -12,8 +12,8 @@ DIR_CONTENT_TYPE = 'application/directory'
 
 XLS_OBJECT_NAME = 'VVP_Blackspot_Voortgangslijst_Kaart_actueel.xls'
 DOWNLOAD_DIR = '/tmp/blackspots/'
-WBA_CONTAINER_NAME = 'wbalijst'
-DOC_CONTAINER_NAME = 'doc'
+WBA_CONTAINER_NAME = f'{settings.OBJECTSTORE_ENV}/wbalijst'
+DOC_CONTAINER_NAME = f'{settings.OBJECTSTORE_ENV}/doc'
 
 DocumentList = List[Tuple[str, str]]
 
@@ -27,7 +27,7 @@ class ObjectStore:
         super().__init__()
 
     def get_connection(self):
-        connection = objectstore.get_connection(self.config)
+        connection = get_connection(self.config)
         return connection
 
     def upload(self, file, document: Document):

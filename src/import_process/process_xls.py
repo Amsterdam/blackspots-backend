@@ -9,7 +9,7 @@ from xlrd import open_workbook
 
 from datasets.blackspots.models import Document, Spot
 from import_process import util
-from storage.objectstore import DocumentList
+from storage.object_store import DocumentList
 
 log = logging.getLogger(__name__)
 

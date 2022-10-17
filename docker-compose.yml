@@ -73,6 +73,7 @@ services:
       AUTHORIZATION_TOKEN: "dev"
       DJANGO_SETTINGS_MODULE: "main.settings"
       OBJECTSTORE_UPLOAD_CONTAINER_NAME: test
+      OBJECTSTORE_ENV: test
       PYTEST_ADDOPTS:
       PYTHONBREAKPOINT:
     depends_on:

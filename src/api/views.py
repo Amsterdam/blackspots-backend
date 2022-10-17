@@ -16,7 +16,7 @@ from api import serializers
 from api.renderers import GeojsonRenderer, StreamingCSVRenderer
 from api.serializers import SpotCSVSerializer, SpotGeojsonSerializer
 from datasets.blackspots import models
-from storage.objectstore import ObjectStore
+from storage.object_store import ObjectStore
 
 logger = logging.getLogger(__name__)
 

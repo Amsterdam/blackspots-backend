@@ -30,7 +30,7 @@ class Command(BaseCommand):
 
 def perform_import(xls_path: Optional[str], keep_existing: bool):
     """
-    :param xls_path: path to the file to process, if None will be downloaded
+    param xls_path: path to the file to process, if None will be downloaded
                      from the object store.
     """
     if not keep_existing:

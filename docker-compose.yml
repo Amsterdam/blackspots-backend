@@ -17,6 +17,7 @@ x-app: &app
     SECRET_KEY: "dev"
     OBJECTSTORE_PASSWORD: "insecure"
     OBJECTSTORE_UPLOAD_CONTAINER_NAME: dev
+    OBJECTSTORE_ENV: 'dev'
 
 
 services:

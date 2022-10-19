@@ -14,7 +14,7 @@ from rest_framework_gis.serializers import GeoFeatureModelSerializer, \
 
 from api.bag_geosearch import BagGeoSearchAPI
 from datasets.blackspots.models import Document, Spot
-from storage.objectstore import ObjectStore
+from storage.object_store import ObjectStore
 
 logger = logging.getLogger(__name__)
 

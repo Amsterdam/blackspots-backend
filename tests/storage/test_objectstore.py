@@ -1,16 +1,16 @@
 from unittest import TestCase, mock
 from unittest.mock import Mock, mock_open
-
+from django.conf import settings
 from django.test import override_settings
 from swiftclient import ClientException, Connection
 
 from datasets.blackspots.models import Document
-from storage.objectstore import DOWNLOAD_DIR, WBA_CONTAINER_NAME, XLS_OBJECT_NAME, ObjectStore
+from storage.object_store import DOWNLOAD_DIR, WBA_CONTAINER_NAME, XLS_OBJECT_NAME, ObjectStore
 
 
 class ObjectStoreTestCase(TestCase):
 
-    @mock.patch("storage.objectstore.objectstore.get_connection")
+    @mock.patch("storage.object_store.get_connection")
     def test_get_connection(self, mocked_get_connection):
         """
         Test and assert that objecstore.get_connection is called with the given
@@ -22,8 +22,8 @@ class ObjectStoreTestCase(TestCase):
         mocked_get_connection.assert_called_with('this is the config')
         self.assertEqual(connection, 'this is the connection')
 
-    @mock.patch("storage.objectstore.objectstore.get_connection")
-    @mock.patch("storage.objectstore.ObjectStore.get_container_path")
+    @mock.patch("storage.object_store.get_connection")
+    @mock.patch("storage.object_store.ObjectStore.get_container_path")
     def test_upload(self, mocked_get_container_path, mocked_get_connection):
         """
         Test and assert that ObjectStore.connection.put_object is called with the correct arguments
@@ -40,8 +40,8 @@ class ObjectStoreTestCase(TestCase):
         objstore.upload(file, document)
         connection.put_object.assert_called_with('container/path/', 'doc_file_name.pdf', file)
 
-    @mock.patch("storage.objectstore.objectstore.get_connection")
-    @mock.patch("storage.objectstore.ObjectStore.get_container_path")
+    @mock.patch("storage.object_store.get_connection")
+    @mock.patch("storage.object_store.ObjectStore.get_container_path")
     def test_delete(self, mocked_get_container_path, mocked_get_connection):
         """
         Test and assert that delete_object is called with the correct arguments
@@ -57,8 +57,8 @@ class ObjectStoreTestCase(TestCase):
         objstore.delete(document)
         connection.delete_object.assert_called_with('container/path/', 'doc_file_name.pdf')
 
-    @mock.patch("storage.objectstore.objectstore.get_connection")
-    @mock.patch("storage.objectstore.ObjectStore.get_container_path")
+    @mock.patch("storage.object_store.get_connection")
+    @mock.patch("storage.object_store.ObjectStore.get_container_path")
     def test_delete_non_existing_file(self, mocked_get_container_path, mocked_get_connection):
         """
         Test and assert that delete_object is called with the correct arguments
@@ -75,7 +75,7 @@ class ObjectStoreTestCase(TestCase):
             objstore.delete(document)
 
         connection.delete_object.assert_called_with('container/path/', 'doc_file_name.pdf')
-        self.assertIn('INFO:storage.objectstore:Failed to delete object for document id 1', logs.output)
+        self.assertIn('INFO:storage.object_store:Failed to delete object for document id 1', logs.output)
 
     def test_get_document(self):
         """
@@ -89,7 +89,7 @@ class ObjectStoreTestCase(TestCase):
         objstore.get_document(connection, container_name, object_name)
         connection.get_object.assert_called_with(container_name, object_name)
 
-    @mock.patch("storage.objectstore.get_full_container_list")
+    @mock.patch("storage.object_store.get_full_container_list")
     def test_get_wba_documents_list(self, mocked_get_full_container_list):
         """
         Test and assert that the correct list of documents is returned
@@ -112,49 +112,52 @@ class ObjectStoreTestCase(TestCase):
             ('ontwerp', 'filename3.pdf'),
         ])
 
-    @mock.patch("storage.objectstore.os.makedirs")
-    @mock.patch("storage.objectstore.os.path.isfile")
+    @mock.patch("storage.object_store.os.makedirs")
+    @mock.patch("storage.object_store.os.path.isfile")
     def test_get_file_cache(self, mocked_isfile, mocked_makedirs):
         connection = Mock()
         container_name = 'container_name_mock'
         object_name = 'object_name_mock'
+        path = 'path_name_mock'
 
         mocked_isfile.return_value = True
 
         objstore = ObjectStore(config='this is the config')
         with self.assertLogs(level='INFO') as logs:
-            return_value = objstore.get_file(connection, container_name, object_name)
+            return_value = objstore.get_file(connection, container_name, path, object_name)
 
-        mocked_makedirs.assert_called_with(DOWNLOAD_DIR, exist_ok=True)
-        self.assertIn('INFO:storage.objectstore:Using cached file: object_name_mock', logs.output)
-        self.assertEqual(return_value, f"{DOWNLOAD_DIR}{object_name}")
+        mocked_makedirs.assert_called_with(f'{DOWNLOAD_DIR}{container_name}/{path}', exist_ok=True)
+        self.assertIn('INFO:storage.object_store:Using cached file: path_name_mock/object_name_mock', logs.output)
+        self.assertEqual(return_value, f"{DOWNLOAD_DIR}{container_name}/{path}/{object_name}")
 
-    @mock.patch("storage.objectstore.os.makedirs")
-    @mock.patch("storage.objectstore.os.path.isfile")
+    @mock.patch("storage.object_store.os.makedirs")
+    @mock.patch("storage.object_store.os.path.isfile")
     @mock.patch("builtins.open", new_callable=mock_open)
     def test_get_file_download(self, mocked_file, mocked_isfile, mocked_makedirs):
         connection = Mock()
         connection.get_object.return_value = [None, 'mocked_data']
         container_name = 'container_name_mock'
         object_name = 'object_name_mock'
+        path = 'path_name_mock'
 
         mocked_isfile.return_value = False
 
         objstore = ObjectStore(config='this is the config')
         with self.assertLogs(level='INFO') as logs:
-            return_value = objstore.get_file(connection, container_name, object_name)
+            return_value = objstore.get_file(connection, container_name, path, object_name)
 
-        mocked_makedirs.assert_called_with(DOWNLOAD_DIR, exist_ok=True)
-        self.assertNotIn('INFO:storage.objectstore:Using cached file: object_name_mock', logs.output)
-        connection.get_object.assert_called_with(container_name, object_name)
+        mocked_makedirs.assert_called_with(f'{DOWNLOAD_DIR}{container_name}/{path}', exist_ok=True)
+        self.assertNotIn('INFO:storage.object_store:Using cached file: path_name_mock/object_name_mock', logs.output)
+        connection.get_object.assert_called_with(container_name, f'{path}/{object_name}')
         mocked_file().write.assert_called_with('mocked_data')
-        self.assertEqual(return_value, f"{DOWNLOAD_DIR}{object_name}")
+        self.assertEqual(return_value, f"{DOWNLOAD_DIR}{container_name}/{path}/{object_name}")
 
-    @mock.patch("storage.objectstore.ObjectStore.get_file")
+    @mock.patch("storage.object_store.ObjectStore.get_file")
     def test_fetch_spots(self, mocked_get_file):
         objstore = ObjectStore(config='this is the config')
         objstore.fetch_spots(connection='test connection')
-        mocked_get_file.assert_called_with('test connection', WBA_CONTAINER_NAME, XLS_OBJECT_NAME)
+        mocked_get_file.assert_called_with('test connection', settings.OBJECTSTORE_ENV,
+                                           WBA_CONTAINER_NAME, XLS_OBJECT_NAME)
 
     @override_settings(OBJECTSTORE_UPLOAD_CONTAINER_NAME="upload_container_name")
     def test_get_container_path_ontwerp(self):

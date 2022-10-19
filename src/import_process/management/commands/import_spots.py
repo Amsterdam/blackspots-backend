@@ -8,7 +8,7 @@ from django.core.management.base import BaseCommand
 from datasets.blackspots.models import Document, Spot
 from import_process.clean import clear_models
 from import_process.process_xls import process_xls
-from storage.objectstore import ObjectStore
+from storage.object_store import ObjectStore
 
 logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger(__name__)
@@ -30,7 +30,7 @@ class Command(BaseCommand):
 
 def perform_import(xls_path: Optional[str], keep_existing: bool):
     """
-    :param xls_path: path to the file to process, if None will be downloaded
+    param xls_path: path to the file to process, if None will be downloaded
                      from the object store.
     """
     if not keep_existing:

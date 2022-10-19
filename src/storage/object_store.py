@@ -3,7 +3,7 @@ import os
 from typing import List, Tuple
 
 from django.conf import settings
-from objectstore import get_full_container_list, objectstore
+from objectstore import get_full_container_list, get_connection
 from swiftclient import ClientException
 
 from datasets.blackspots.models import Document
@@ -12,8 +12,8 @@ DIR_CONTENT_TYPE = 'application/directory'
 
 XLS_OBJECT_NAME = 'VVP_Blackspot_Voortgangslijst_Kaart_actueel.xls'
 DOWNLOAD_DIR = '/tmp/blackspots/'
-WBA_CONTAINER_NAME = 'wbalijst'
-DOC_CONTAINER_NAME = 'doc'
+WBA_CONTAINER_NAME = f'wbalijst'
+DOC_CONTAINER_NAME = f'doc'
 
 DocumentList = List[Tuple[str, str]]
 
@@ -27,7 +27,7 @@ class ObjectStore:
         super().__init__()
 
     def get_connection(self):
-        connection = objectstore.get_connection(self.config)
+        connection = get_connection(self.config)
         return connection
 
     def upload(self, file, document: Document):
@@ -61,28 +61,36 @@ class ObjectStore:
         :return: Array of documents in the form:
         [('rapportage', 'QE1_rapportage_Some_where - some extra info.pdf'), ... ]
         """
-        documents_meta = get_full_container_list(connection, DOC_CONTAINER_NAME)
+        documents_meta = get_full_container_list(connection, container=settings.OBJECTSTORE_ENV,
+                                                 prefix=DOC_CONTAINER_NAME)
         documents_paths = [
             meta.get('name') for meta in documents_meta if
             meta.get('content_type') != DIR_CONTENT_TYPE
         ]
         return list(map(os.path.split, documents_paths))
 
-    def get_file(self, connection, container_name, object_name):
-        os.makedirs(DOWNLOAD_DIR, exist_ok=True)
-        output_path = os.path.join(DOWNLOAD_DIR, object_name)
+    def get_file(self, connection, container_name: str, path: str, object_name: str):
+        """
+        Download the file from stack and store write it to the temp download folder
+        :param connection: swiftclient connection object
+        :param container_name The name of the container(acc or prod)
+        :param path: the path where the object is stored you want to download
+        :param object_name: The name of the object you want to download
+        """
+        os.makedirs(f'{DOWNLOAD_DIR}{container_name}/{path}', exist_ok=True)
+        output_path = os.path.join(f'{DOWNLOAD_DIR}{container_name}/{path}', object_name)
 
         if os.path.isfile(output_path):
-            logger.info(f"Using cached file: {object_name}")
+            logger.info(f"Using cached file: {path}/{object_name}")
         else:
-            logger.info(f"Fetching file: {object_name}")
-            new_data = connection.get_object(container_name, object_name)[1]
+            logger.info(f"Fetching file: {path}/{object_name}")
+            new_data = connection.get_object(container_name, f'{path}/{object_name}')[1]
             with open(output_path, 'wb') as file:
                 file.write(new_data)
         return output_path
 
     def fetch_spots(self, connection):
-        return self.get_file(connection, WBA_CONTAINER_NAME, XLS_OBJECT_NAME)
+        return self.get_file(connection, settings.OBJECTSTORE_ENV, WBA_CONTAINER_NAME, XLS_OBJECT_NAME)
 
     @staticmethod
     def get_container_path(document_type):

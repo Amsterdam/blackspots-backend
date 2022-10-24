@@ -16,7 +16,7 @@ log = logging.getLogger(__name__)
 EXCEL_STRUCTURE = {
     'number':                       {'column_idx': 0, 'header': 'Nummer'},
     'description':                  {'column_idx': 1, 'header': 'Locatie omschrijving'},
-    'type':                         {'column_idx': 2, 'header': ''},  # Type
+    'type':                         {'column_idx': 2, 'header': 'Type'},  # Type
     'lat':                          {'column_idx': 3, 'header': 'Lat'},
     'lng':                          {'column_idx': 4, 'header': 'Long'},
     'wegvak':                       {'column_idx': 5, 'header': 'Wegvak'},  # was wegvak

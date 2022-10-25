@@ -114,24 +114,6 @@ class ObjectStoreTestCase(TestCase):
 
     @mock.patch("storage.object_store.os.makedirs")
     @mock.patch("storage.object_store.os.path.isfile")
-    def test_get_file_cache(self, mocked_isfile, mocked_makedirs):
-        connection = Mock()
-        container_name = 'container_name_mock'
-        object_name = 'object_name_mock'
-        path = 'path_name_mock'
-
-        mocked_isfile.return_value = True
-
-        objstore = ObjectStore(config='this is the config')
-        with self.assertLogs(level='INFO') as logs:
-            return_value = objstore.get_file(connection, container_name, path, object_name)
-
-        mocked_makedirs.assert_called_with(f'{DOWNLOAD_DIR}{container_name}/{path}', exist_ok=True)
-        self.assertIn('INFO:storage.object_store:Using cached file: path_name_mock/object_name_mock', logs.output)
-        self.assertEqual(return_value, f"{DOWNLOAD_DIR}{container_name}/{path}/{object_name}")
-
-    @mock.patch("storage.object_store.os.makedirs")
-    @mock.patch("storage.object_store.os.path.isfile")
     @mock.patch("builtins.open", new_callable=mock_open)
     def test_get_file_download(self, mocked_file, mocked_isfile, mocked_makedirs):
         connection = Mock()

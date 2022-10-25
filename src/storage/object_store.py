@@ -80,13 +80,10 @@ class ObjectStore:
         os.makedirs(f'{DOWNLOAD_DIR}{container_name}/{path}', exist_ok=True)
         output_path = os.path.join(f'{DOWNLOAD_DIR}{container_name}/{path}', object_name)
 
-        if os.path.isfile(output_path):
-            logger.info(f"Using cached file: {path}/{object_name}")
-        else:
-            logger.info(f"Fetching file: {path}/{object_name}")
-            new_data = connection.get_object(container_name, f'{path}/{object_name}')[1]
-            with open(output_path, 'wb') as file:
-                file.write(new_data)
+        logger.info(f"Fetching file: {path}/{object_name}")
+        new_data = connection.get_object(container_name, f'{path}/{object_name}')[1]
+        with open(output_path, 'wb') as file:
+            file.write(new_data)
         return output_path
 
     def fetch_spots(self, connection):

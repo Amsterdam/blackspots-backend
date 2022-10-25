@@ -97,6 +97,7 @@ def get_spot_type(abbreviation):
         'QD': Spot.SpotType.protocol_dodelijk,
         'QE': Spot.SpotType.protocol_ernstig,
         'R': Spot.SpotType.risicolocatie_ivm,
+        'G': Spot.SpotType.gebiedslocatie_ivm,
         # also support non-abbreviation references to spot type...
         'blackspot': Spot.SpotType.blackspot,
         'wegvak': Spot.SpotType.wegvak,

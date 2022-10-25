@@ -16,10 +16,10 @@ log = logging.getLogger(__name__)
 EXCEL_STRUCTURE = {
     'number':                       {'column_idx': 0, 'header': 'Nummer'},
     'description':                  {'column_idx': 1, 'header': 'Locatie omschrijving'},
-    'type':                         {'column_idx': 2, 'header': ''},  # Type
+    'type':                         {'column_idx': 2, 'header': 'Type'},
     'lat':                          {'column_idx': 3, 'header': 'Lat'},
     'lng':                          {'column_idx': 4, 'header': 'Long'},
-    'wegvak':                       {'column_idx': 5, 'header': 'Wegvak'},  # was wegvak
+    'wegvak':                       {'column_idx': 5, 'header': 'Wegvak'},
     'stadsdeel':                    {'column_idx': 6, 'header': 'Stadsdeel'},
     'status':                       {'column_idx': 7, 'header': 'Status'},
     'actiehouders':                 {'column_idx': 8, 'header': 'Actiehouders'},
@@ -97,6 +97,7 @@ def get_spot_type(abbreviation):
         'QD': Spot.SpotType.protocol_dodelijk,
         'QE': Spot.SpotType.protocol_ernstig,
         'R': Spot.SpotType.risicolocatie_ivm,
+        'G': Spot.SpotType.gebiedslocatie_ivm,
         # also support non-abbreviation references to spot type...
         'blackspot': Spot.SpotType.blackspot,
         'wegvak': Spot.SpotType.wegvak,

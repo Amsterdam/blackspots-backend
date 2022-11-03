@@ -20,20 +20,23 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         # useful for local testing / debugging
         parser.add_argument('--xls_path', type=str, default=None)
-        parser.add_argument('--keep-existing', action='store_true')
+        parser.add_argument('--remove_existing_data', action='store_true',
+                            help='add --remove_existing_data to clean all records from the db before importing')
 
     def handle(self, *args, **options):
         if not (xls_path := options.get('xls_path')):
             assert os.getenv('OBJECTSTORE_PASSWORD')
-        perform_import(xls_path, options['keep_existing'])
+        perform_import(xls_path, options['remove_existing_data'])
 
 
-def perform_import(xls_path: Optional[str], keep_existing: bool):
+def perform_import(xls_path: Optional[str], remove_existing_data: bool):
     """
-    param xls_path: path to the file to process, if None will be downloaded
-                     from the object store.
+    Perform an import from new spots and documents
+    :param xls_path: path to the file to process, if None will be downloaded from the object store
+    :param remove_existing_data: adding the parameter --remove_existing_data will clear all the records before importing
     """
-    if not keep_existing:
+
+    if remove_existing_data:
         log.info('Clearing models')
         clear_models()
 

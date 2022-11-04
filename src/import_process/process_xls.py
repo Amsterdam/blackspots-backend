@@ -168,6 +168,21 @@ def create_document(
 
     Document.objects.create(type=doc_type, filename=filename, spot=spot)
 
+def upsert_spot(spot_data: dict):
+    """
+    Upsert a spot if the spot already exists else create the spot with the spot data
+    """
+    try:
+        spot = Spot.objects.get(locatie_id=spot_data['locatie_id'])
+
+        for key, value in spot_data.items():
+            if value is not None and hasattr(spot, key):
+                setattr(spot, key, value)
+
+    except Spot.DoesNotExist as e:
+        spot = Spot.objects.create(**spot_data)
+
+    return spot
 
 def process_xls(xls_path, document_list: Optional[DocumentList]):
     book = open_workbook(xls_path)
@@ -228,7 +243,7 @@ def process_xls(xls_path, document_list: Optional[DocumentList]):
             ),
         }
 
-        [spot, _] = Spot.objects.get_or_create(**spot_data)
+        spot = upsert_spot(spot_data)
 
         create_document(document_list,
                         Document.DocumentType.Rapportage,

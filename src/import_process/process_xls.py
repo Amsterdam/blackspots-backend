@@ -168,6 +168,7 @@ def create_document(
 
     Document.objects.create(type=doc_type, filename=filename, spot=spot)
 
+
 def upsert_spot(spot_data: dict):
     """
     Upsert a spot if the spot already exists else create the spot with the spot data
@@ -183,6 +184,7 @@ def upsert_spot(spot_data: dict):
         spot = Spot.objects.create(**spot_data)
 
     return spot
+
 
 def process_xls(xls_path, document_list: Optional[DocumentList]):
     book = open_workbook(xls_path)

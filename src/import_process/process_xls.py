@@ -179,6 +179,7 @@ def upsert_spot(spot_data: dict):
         for key, value in spot_data.items():
             if value is not None and hasattr(spot, key):
                 setattr(spot, key, value)
+        spot.save()
 
     except Spot.DoesNotExist as e:
         spot = Spot.objects.create(**spot_data)

@@ -17,7 +17,7 @@ attrs==22.1.0
     #   pytest
 backcall==0.2.0
     # via ipython
-certifi==2022.9.24
+certifi==2022.12.7
     # via
     #   -r ./requirements.txt
     #   requests
@@ -128,8 +128,6 @@ drf-extensions==0.7.1
     #   drf-amsterdam
 drf-yasg==1.21.4
     # via -r ./requirements.txt
-exceptiongroup==1.0.4
-    # via pytest
 executing==1.2.0
     # via stack-data
 filelock==3.8.1
@@ -332,10 +330,6 @@ ruamel-yaml==0.17.21
     # via
     #   -r ./requirements.txt
     #   drf-yasg
-ruamel-yaml-clib==0.2.7
-    # via
-    #   -r ./requirements.txt
-    #   ruamel-yaml
 sentry-sdk==1.11.1
     # via -r ./requirements.txt
 simplejson==3.18.0
@@ -366,11 +360,6 @@ stevedore==4.1.1
     #   python-keystoneclient
 toml==0.10.2
     # via ipdb
-tomli==2.0.1
-    # via
-    #   coverage
-    #   pytest
-    #   tox
 tox==3.27.1
     # via -r requirements_dev.in
 traitlets==5.6.0

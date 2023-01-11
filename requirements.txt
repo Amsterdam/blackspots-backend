@@ -132,7 +132,7 @@ packaging==23.0
     #   drf-yasg
     #   oslo-utils
     #   python-keystoneclient
-pbr==5.11.0
+pbr==5.11.1
     # via
     #   keystoneauth1
     #   os-service-types
@@ -210,7 +210,7 @@ uritemplate==4.1.1
     # via
     #   coreapi
     #   drf-yasg
-urllib3==1.26.13
+urllib3==1.26.14
     # via
     #   requests
     #   sentry-sdk

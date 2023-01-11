@@ -64,5 +64,5 @@ update_stadsdeel_errors:
 	$(dc) run --rm app /deploy/docker-update-stadsdelen.sh
 
 trivy: 							## Detect image vulnerabilities
-	$(dc) build app
+	$(dc) build --no-cache app
 	trivy image --ignore-unfixed docker-registry.data.amsterdam.nl/datapunt/blackspots

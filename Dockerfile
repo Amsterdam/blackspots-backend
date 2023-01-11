@@ -1,8 +1,15 @@
-FROM amsterdam/python:3.8-buster as app
+FROM python:3.8-buster as app
 MAINTAINER datapunt@amsterdam.nl
 
+ENV PYTHONUNBUFFERED 1 \
+    PIP_NO_CACHE_DIR=off
+
 RUN apt-get update \
+    && apt-get dist-upgrade -y \
+    && apt-get install --no-install-recommends -y \
 	&& apt-get install -y gdal-bin libgeos-dev netcat \
+    && pip install --upgrade pip \
+    && pip install uwsgi \
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 

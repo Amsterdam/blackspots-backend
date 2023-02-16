@@ -1,4 +1,4 @@
-version: "3.4"
+version: "3.5"
 
 x-app: &app
   build:
@@ -34,7 +34,10 @@ services:
   
   app:
     <<: *app
-    image: docker-registry.data.amsterdam.nl/datapunt/blackspots:${VERSION:-latest}
+    image: ${REGISTRY:-127.0.0.1:5001}/${REPOSITORY:-blackspots/api}:${VERSION:-latest}
+#    image: docker-registry.data.amsterdam.nl/datapunt/blackspots:${VERSION:-latest}
+    depends_on:
+      - database
 
   dev:
     <<: *app
@@ -45,21 +48,22 @@ services:
       <<: *app_environment
       DEBUG: 1
       USE_JWKS_TEST_KEY: "True"
+    image: ${REGISTRY:-127.0.0.1:5001}/${REPOSITORY:-blackspots/api}-dev:${VERSION:-latest}
     command: "./manage.py runserver 0.0.0.0:8000"
 
-  update_stadsdeel_errors:
-    build:
-      context: .
-      target: app
-    links:
-      - database
-    environment:
-      CRET_KEY: "dev"
-      TABASE_NAME: "dev"
-      TABASE_USER: "dev"
-      TABASE_PASSWORD: "dev"
-    entrypoint: /deploy/wait-for-it.sh database:5432 --
-    command: deploy/docker-update-stadsdelen.sh
+#  update_stadsdeel_errors:
+#    build:
+#      context: .
+#      target: app
+#    links:
+#      - database
+#    environment:
+#      CRET_KEY: "dev"
+#      TABASE_NAME: "dev"
+#      TABASE_USER: "dev"
+#      TABASE_PASSWORD: "dev"
+#    entrypoint: /deploy/wait-for-it.sh database:5432 --
+#    command: deploy/docker-update-stadsdelen.sh
 
   test:
     build:
@@ -77,6 +81,7 @@ services:
       OBJECTSTORE_ENV: test
       PYTEST_ADDOPTS:
       PYTHONBREAKPOINT:
+    image: ${REGISTRY:-127.0.0.1:5001}/${REPOSITORY:-blackspots/api}-test:${VERSION:-latest}
     depends_on:
       - database
     entrypoint: /deploy/wait-for-it.sh database:5432 --

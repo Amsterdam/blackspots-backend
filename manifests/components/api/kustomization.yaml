@@ -1,0 +1,12 @@
+kind: Component
+
+configMapGenerator:
+  - name: api-env
+    envs:
+      - config.env
+
+resources:
+  - deployment.yaml
+  - service.yaml
+  - ingress.yaml
+#  - migrate.job.yaml

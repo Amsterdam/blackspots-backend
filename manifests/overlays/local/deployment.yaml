@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+  labels:
+    component: api
+spec:
+  selector:
+    matchLabels:
+      component: api
+  replicas: 1
+  template:
+    spec:
+      containers:
+        - name: main
+          image: 127.0.0.1:5001/blackspots/api-dev:latest
+          command:
+            - python
+            - manage.py
+            - runserver
+            - 0.0.0.0:8000
+          volumeMounts:
+            - mountPath: /secrets
+              $patch: delete
+      volumes:
+        - name: secrets
+          $patch: delete

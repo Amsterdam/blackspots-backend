@@ -1,0 +1,37 @@
+resources:
+  - ../../base
+
+components:
+  - ../../components/api
+  - ../../components/database
+
+commonLabels:
+  team: opdrachten
+  app: blackspots-api
+  env: local
+
+buildMetadata:
+  - originAnnotations
+
+patchesStrategicMerge:
+  - deployment.yaml
+
+secretGenerator:
+  - name: app-secrets
+    literals:
+      - DEBUG=true
+      - SECRET_KEY=dev
+      - DATABASE_HOST=database
+      - DATABASE_NAME=dev
+      - DATABASE_PASSWORD=dev
+      - DATABASE_PORT=5432
+      - DATABASE_USER=dev
+      - OBJECTSTORE_PASSWORD=insecure
+      - OBJECTSTORE_UPLOAD_CONTAINER_NAME=dev
+      - OBJECTSTORE_ENV=dev
+      - USE_JWKS_TEST_KEY=True
+
+
+images:
+  - name: 127.0.0.1:5001/blackspots/api-dev
+    newTag: latest

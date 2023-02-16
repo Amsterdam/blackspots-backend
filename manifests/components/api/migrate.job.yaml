@@ -1,0 +1,31 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrate
+  labels:
+    component: migrate
+spec:
+  backoffLimit: 15
+  template:
+    metadata:
+      labels:
+        component: migrate
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: main
+          image: 127.0.0.1:5001/blackspots/api:latest
+          imagePullPolicy: Always # IfNotPresent
+          command:
+            - python
+            - manage.py
+            - migrate
+
+          securityContext:
+            privileged: false
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+
+          envFrom:
+            - configMapRef:
+                name: api-env

@@ -48,7 +48,7 @@ USER datapunt
 # we write to /tmp since we have no home dir
 ENV HOME /tmp
 
-CMD ["python manage.py runserver 0.0.0.0"]
+CMD ["python manage.py runserver 0.0.0.0:8000"]
 
 # tests
 FROM dev as tests

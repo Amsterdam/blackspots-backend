@@ -51,19 +51,19 @@ services:
     image: ${REGISTRY:-127.0.0.1:5001}/${REPOSITORY:-blackspots/api}-dev:${VERSION:-latest}
     command: "./manage.py runserver 0.0.0.0:8000"
 
-#  update_stadsdeel_errors:
-#    build:
-#      context: .
-#      target: app
-#    links:
-#      - database
-#    environment:
-#      CRET_KEY: "dev"
-#      TABASE_NAME: "dev"
-#      TABASE_USER: "dev"
-#      TABASE_PASSWORD: "dev"
-#    entrypoint: /deploy/wait-for-it.sh database:5432 --
-#    command: deploy/docker-update-stadsdelen.sh
+  update_stadsdeel_errors:
+    build:
+      context: .
+      target: app
+    links:
+      - database
+    environment:
+      CRET_KEY: "dev"
+      TABASE_NAME: "dev"
+      TABASE_USER: "dev"
+      TABASE_PASSWORD: "dev"
+    entrypoint: /deploy/wait-for-it.sh database:5432 --
+    command: deploy/docker-update-stadsdelen.sh
 
   test:
     build:

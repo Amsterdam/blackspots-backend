@@ -67,8 +67,8 @@ trivy: 							## Detect image vulnerabilities
 	$(dc) build --no-cache app
 	trivy image --ignore-unfixed docker-registry.data.amsterdam.nl/datapunt/blackspots
 
-k_deploy:
+kustimize:
 	kustomize build manifests/overlays/local | kubectl apply -f -
 
-undeploy:
+undeploy_kustimize:
 	kustomize build manifests/overlays/local | kubectl delete -f -

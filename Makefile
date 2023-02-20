@@ -66,3 +66,9 @@ update_stadsdeel_errors:
 trivy: 							## Detect image vulnerabilities
 	$(dc) build --no-cache app
 	trivy image --ignore-unfixed docker-registry.data.amsterdam.nl/datapunt/blackspots
+
+k_deploy:
+	kustomize build manifests/overlays/local | kubectl apply -f -
+
+undeploy:
+	kustomize build manifests/overlays/local | kubectl delete -f -

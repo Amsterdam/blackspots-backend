@@ -15,6 +15,7 @@ buildMetadata:
 
 patchesStrategicMerge:
   - deployment.yaml
+  - migrate.job.yaml
 
 secretGenerator:
   - name: app-secrets

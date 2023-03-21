@@ -14,3 +14,7 @@ ipdb
 # Development Libraries
 django-cors-headers
 django-debug-toolbar
+
+isort
+autoflake
+black

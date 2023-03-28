@@ -51,7 +51,7 @@ test: lint
 pdb:
 	$(run) test pytest --pdb $(ARGS)
 
-clean:git
+clean:
 	$(dc) down -v
 
 bash:

@@ -2,7 +2,6 @@ import logging
 
 import six
 from datapunt_api.rest import HALSerializer
-from datasets.blackspots.models import Document, Spot
 from django.conf import settings
 from django.contrib.gis.geos import Point, Polygon
 from django.db import models
@@ -10,10 +9,13 @@ from django.db.models import query
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
-from rest_framework_gis.serializers import (GeoFeatureModelSerializer,
-                                            GeometrySerializerMethodField)
+from rest_framework_gis.serializers import (
+    GeoFeatureModelSerializer,
+    GeometrySerializerMethodField,
+)
 
 from api.bag_geosearch import BagGeoSearchAPI
+from datasets.blackspots.models import Document, Spot
 from storage.object_store import ObjectStore
 
 logger = logging.getLogger(__name__)

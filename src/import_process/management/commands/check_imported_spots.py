@@ -1,7 +1,8 @@
 import logging
 
-from datasets.blackspots.models import Document, Spot
 from django.core.management.base import BaseCommand
+
+from datasets.blackspots.models import Document, Spot
 
 logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger(__name__)

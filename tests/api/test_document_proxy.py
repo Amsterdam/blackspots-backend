@@ -1,13 +1,13 @@
 import logging
 from unittest.mock import patch
 
-from datasets.blackspots import models
-from datasets.blackspots.models import Document
 from django.test import TestCase
 from model_bakery import baker
 from rest_framework.reverse import reverse
 from swiftclient import ClientException
 
+from datasets.blackspots import models
+from datasets.blackspots.models import Document
 from tests.api.authzsetup import AuthorizationSetup
 
 log = logging.getLogger(__name__)

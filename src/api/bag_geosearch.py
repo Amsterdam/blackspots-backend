@@ -1,10 +1,10 @@
 import logging
 
 import requests
-from datasets.blackspots.models import Spot
 from django.conf import settings
 from requests import RequestException
 
+from datasets.blackspots.models import Spot
 from import_process.util import get_stadsdeel
 
 logger = logging.getLogger(__name__)

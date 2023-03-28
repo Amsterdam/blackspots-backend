@@ -2,10 +2,11 @@ import logging
 import os
 from typing import List, Tuple
 
-from datasets.blackspots.models import Document
 from django.conf import settings
 from objectstore import get_connection, get_full_container_list
 from swiftclient import ClientException
+
+from datasets.blackspots.models import Document
 
 DIR_CONTENT_TYPE = "application/directory"
 

@@ -1,13 +1,17 @@
 from unittest import TestCase, mock
 from unittest.mock import Mock, mock_open
 
-from datasets.blackspots.models import Document
 from django.conf import settings
 from django.test import override_settings
 from swiftclient import ClientException, Connection
 
-from storage.object_store import (DOWNLOAD_DIR, WBA_CONTAINER_NAME,
-                                  XLS_OBJECT_NAME, ObjectStore)
+from datasets.blackspots.models import Document
+from storage.object_store import (
+    DOWNLOAD_DIR,
+    WBA_CONTAINER_NAME,
+    XLS_OBJECT_NAME,
+    ObjectStore,
+)
 
 
 class ObjectStoreTestCase(TestCase):

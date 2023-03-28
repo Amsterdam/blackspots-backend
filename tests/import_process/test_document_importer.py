@@ -1,9 +1,9 @@
 from unittest import skip
 
-from datasets.blackspots.models import Document, Spot
 from django.test import TestCase
 from model_bakery import baker
 
+from datasets.blackspots.models import Document, Spot
 from import_process.process_xls import InputError, create_document
 
 

@@ -2,12 +2,12 @@ import logging
 import random
 from unittest import mock
 
-from datasets.blackspots import models
-from datasets.blackspots.models import Document, Spot
 from django.test import TransactionTestCase
 from model_bakery import baker, seq
 from rest_framework.reverse import reverse
 
+from datasets.blackspots import models
+from datasets.blackspots.models import Document, Spot
 from tests.api.authzsetup import AuthorizationSetup
 
 log = logging.getLogger(__name__)

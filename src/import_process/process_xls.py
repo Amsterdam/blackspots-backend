@@ -3,10 +3,10 @@ from ast import literal_eval
 from typing import Optional
 
 import xlrd
-from datasets.blackspots.models import Document, Spot
 from django.contrib.gis.geos import Point, Polygon
 from xlrd import open_workbook
 
+from datasets.blackspots.models import Document, Spot
 from import_process import util
 from storage.object_store import DocumentList
 

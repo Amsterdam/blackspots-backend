@@ -1,11 +1,11 @@
 from unittest import TestCase, mock
 
-from datasets.blackspots.models import Spot
 from django.contrib.gis.geos import Point, Polygon
 from django.utils.translation import gettext_lazy as _
 from rest_framework.exceptions import ValidationError
 
 from api.serializers import SpotSerializer
+from datasets.blackspots.models import Spot
 
 
 class TestSpotSerializers(TestCase):

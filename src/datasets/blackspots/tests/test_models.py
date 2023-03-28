@@ -1,7 +1,8 @@
 from unittest import TestCase, mock
 
-from datasets.blackspots.models import Document, Spot
 from model_bakery import baker
+
+from datasets.blackspots.models import Document, Spot
 
 
 class TestSpot(TestCase):

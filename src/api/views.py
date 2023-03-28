@@ -2,10 +2,13 @@ import logging
 from datetime import date
 
 from datapunt_api.rest import DatapuntViewSet
-from datasets.blackspots import models
 from django.conf import settings
-from django.http import (Http404, HttpResponse, HttpResponseServerError,
-                         StreamingHttpResponse)
+from django.http import (
+    Http404,
+    HttpResponse,
+    HttpResponseServerError,
+    StreamingHttpResponse,
+)
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import mixins
 from rest_framework.decorators import action
@@ -17,6 +20,7 @@ from swiftclient.exceptions import ClientException
 from api import serializers
 from api.renderers import GeojsonRenderer, StreamingCSVRenderer
 from api.serializers import SpotCSVSerializer, SpotGeojsonSerializer
+from datasets.blackspots import models
 from storage.object_store import ObjectStore
 
 logger = logging.getLogger(__name__)

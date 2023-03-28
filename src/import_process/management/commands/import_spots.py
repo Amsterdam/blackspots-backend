@@ -2,10 +2,10 @@ import logging
 import os
 from typing import Optional
 
-from datasets.blackspots.models import Document, Spot
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
+from datasets.blackspots.models import Document, Spot
 from import_process.clean import clear_models
 from import_process.process_xls import process_xls
 from storage.object_store import ObjectStore

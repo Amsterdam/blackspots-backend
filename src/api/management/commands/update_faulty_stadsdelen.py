@@ -1,10 +1,10 @@
 import logging
 from collections import defaultdict
 
-from datasets.blackspots.models import Spot
 from django.core.management.base import BaseCommand
 
 from api.bag_geosearch import BagGeoSearchAPI
+from datasets.blackspots.models import Spot
 
 logger = logging.getLogger(__name__)
 

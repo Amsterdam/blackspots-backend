@@ -1,10 +1,10 @@
 from unittest import TestCase
 from unittest.mock import Mock, patch
 
-from datasets.blackspots.models import Spot
 from requests import ConnectionError, HTTPError, Timeout, TooManyRedirects
 
 from api.bag_geosearch import BagGeoSearchAPI
+from datasets.blackspots.models import Spot
 
 
 class TestBagGeoSearchAPI(TestCase):

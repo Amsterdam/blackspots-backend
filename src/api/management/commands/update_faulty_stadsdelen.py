@@ -1,17 +1,19 @@
 import logging
 from collections import defaultdict
 
+from datasets.blackspots.models import Spot
 from django.core.management.base import BaseCommand
 
 from api.bag_geosearch import BagGeoSearchAPI
-from datasets.blackspots.models import Spot
 
 logger = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
-    help = 'Try to determine the stadsdeel for each Spot where stadsdeel ' \
-           'is unknown due to earlier connection errors'
+    help = (
+        "Try to determine the stadsdeel for each Spot where stadsdeel "
+        "is unknown due to earlier connection errors"
+    )
 
     def handle(self, *args, **options):
         spots = Spot.objects.filter(stadsdeel=Spot.Stadsdelen.BagFout)

@@ -5,19 +5,39 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('blackspots', '0003_spot_spot_type'),
+        ("blackspots", "0003_spot_spot_type"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Document',
+            name="Document",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('type', models.CharField(choices=[('Ontwerp', 'Ontwerp'), ('Rapportage', 'Rapportage')], max_length=16)),
-                ('filename', models.CharField(max_length=128)),
-                ('spot', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='documents', to='blackspots.Spot')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "type",
+                    models.CharField(
+                        choices=[("Ontwerp", "Ontwerp"), ("Rapportage", "Rapportage")],
+                        max_length=16,
+                    ),
+                ),
+                ("filename", models.CharField(max_length=128)),
+                (
+                    "spot",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="documents",
+                        to="blackspots.Spot",
+                    ),
+                ),
             ],
         ),
     ]

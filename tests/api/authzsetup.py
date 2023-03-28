@@ -15,6 +15,7 @@ class AuthorizationSetup(object):
     auth_token_read
     auth_token_read_write
     """
+
     anon_client = None
     read_client = None
     write_client = None
@@ -26,11 +27,13 @@ class AuthorizationSetup(object):
 
         token_read = self._get_token(settings.SCOPE_BS_READ)
         self.read_client = APIClient()
-        self.read_client.credentials(HTTP_AUTHORIZATION='Bearer {}'.format(token_read))
+        self.read_client.credentials(HTTP_AUTHORIZATION="Bearer {}".format(token_read))
 
         token_read_write = self._get_token(settings.SCOPE_BS_WRITE)
         self.write_client = APIClient()
-        self.write_client.credentials(HTTP_AUTHORIZATION='Bearer {}'.format(token_read_write))
+        self.write_client.credentials(
+            HTTP_AUTHORIZATION="Bearer {}".format(token_read_write)
+        )
 
     def _get_token(self, scope):
         """

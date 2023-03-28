@@ -4,7 +4,6 @@ from djchoices import ChoiceItem, DjangoChoices
 
 
 class Spot(models.Model):
-
     class StatusChoice(DjangoChoices):
         voorbereiding = ChoiceItem()
         onderzoek_ontwerp = ChoiceItem()
@@ -19,23 +18,24 @@ class Spot(models.Model):
         protocol_ernstig = ChoiceItem()
         protocol_dodelijk = ChoiceItem()
         risicolocatie_ivm = ChoiceItem()
-        gebiedslocatie_ivm = ChoiceItem()  # infrastructurele verkeersveiligheidsmaatregel
+        gebiedslocatie_ivm = (
+            ChoiceItem()
+        )  # infrastructurele verkeersveiligheidsmaatregel
         schoolstraat = ChoiceItem()
         vso = ChoiceItem()  # veilige schoolomgeving
 
-
     class Stadsdelen(DjangoChoices):
-        Zuidoost = ChoiceItem('T')
-        Centrum = ChoiceItem('A')
-        Noord = ChoiceItem('N')
-        Westpoort = ChoiceItem('B')
-        West = ChoiceItem('E')
-        Nieuw_West = ChoiceItem('F')
-        Zuid = ChoiceItem('K')
-        Oost = ChoiceItem('M')
-        Weesp = ChoiceItem('S')
-        Geen = ChoiceItem('X')
-        BagFout = ChoiceItem('ERR')
+        Zuidoost = ChoiceItem("T")
+        Centrum = ChoiceItem("A")
+        Noord = ChoiceItem("N")
+        Westpoort = ChoiceItem("B")
+        West = ChoiceItem("E")
+        Nieuw_West = ChoiceItem("F")
+        Zuid = ChoiceItem("K")
+        Oost = ChoiceItem("M")
+        Weesp = ChoiceItem("S")
+        Geen = ChoiceItem("X")
+        BagFout = ChoiceItem("ERR")
 
     locatie_id = models.CharField(unique=True, max_length=16)
     spot_type = models.CharField(max_length=24, choices=SpotType.choices)
@@ -46,10 +46,7 @@ class Spot(models.Model):
 
     stadsdeel = models.CharField(max_length=3, choices=Stadsdelen.choices)
 
-    status = models.CharField(
-        max_length=32,
-        choices=StatusChoice.choices
-    )
+    status = models.CharField(max_length=32, choices=StatusChoice.choices)
 
     actiehouders = models.CharField(max_length=256)
 
@@ -64,7 +61,7 @@ class Spot(models.Model):
     jaar_opgenomen_in_ivm_lijst = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
-        return f'{self.locatie_id}: {self.spot_type}'
+        return f"{self.locatie_id}: {self.spot_type}"
 
 
 class Document(models.Model):
@@ -74,12 +71,14 @@ class Document(models.Model):
 
     type = models.CharField(max_length=16, choices=DocumentType.choices)
     filename = models.CharField(max_length=256)
-    spot = models.ForeignKey(Spot, related_name='documents', on_delete=models.CASCADE)
+    spot = models.ForeignKey(Spot, related_name="documents", on_delete=models.CASCADE)
 
     def __str__(self):
         return self.filename
 
-    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+    def save(
+        self, force_insert=False, force_update=False, using=None, update_fields=None
+    ):
         if self.spot and self.type and not self.filename:
             self.filename = self._generate_filename()
         super().save(force_insert, force_update, using, update_fields)
@@ -88,6 +87,8 @@ class Document(models.Model):
         if not self.spot_id:
             raise Exception("Spot must be set")
 
-        doc_type = "ontwerp" if self.type == Document.DocumentType.Ontwerp else "rapportage"
+        doc_type = (
+            "ontwerp" if self.type == Document.DocumentType.Ontwerp else "rapportage"
+        )
         base_filename = f"{self.spot.locatie_id}_{doc_type}_{self.spot.description}.pdf"
         return get_valid_filename(base_filename)

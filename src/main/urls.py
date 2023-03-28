@@ -19,16 +19,16 @@ from django.urls import include
 from rest_framework_swagger.views import get_swagger_view
 
 urlpatterns = [
-    url(r'', include('api.urls')),
-    url(r'^status/', include('health.urls')),
+    url(r"", include("api.urls")),
+    url(r"^status/", include("health.urls")),
 ]
 
 
 if settings.DEBUG:
     import debug_toolbar
-    schema_view = get_swagger_view(title='WBA Kaart API')
 
-    urlpatterns.extend([
-        url(r'^__debug__/', include(debug_toolbar.urls)),
-        url(r'^docs/$', schema_view)
-    ])
+    schema_view = get_swagger_view(title="WBA Kaart API")
+
+    urlpatterns.extend(
+        [url(r"^__debug__/", include(debug_toolbar.urls)), url(r"^docs/$", schema_view)]
+    )

@@ -83,11 +83,11 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = 'main.urls'
-BASE_URL = os.getenv('BASE_URL', '')
+ROOT_URLCONF = "main.urls"
+BASE_URL = os.getenv("BASE_URL", "")
 FORCE_SCRIPT_NAME = BASE_URL
 
-STATIC_URL = os.path.join(BASE_URL, '/static/')
+STATIC_URL = os.path.join(BASE_URL, "/static/")
 STATIC_ROOT = "static"
 
 
@@ -98,9 +98,15 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",},
-    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",},
-    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",},
+    {
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
+    },
 ]
 
 
@@ -192,8 +198,8 @@ REST_FRAMEWORK = dict(
 # Note! Scopes from keycloak are converted to uppercase,
 # and underscores are replaced by slashes.
 # Therefore bs_r and bs_w in keycloak become BS/R and BS/W.
-SCOPE_BS_READ = 'BS/R'
-SCOPE_BS_WRITE = 'BS/W'
+SCOPE_BS_READ = "BS/R"
+SCOPE_BS_WRITE = "BS/W"
 
 DATAPUNT_AUTHZ = {
     "JWKS_URL": os.getenv("KEYCLOAK_JWKS_URL"),
@@ -207,7 +213,7 @@ DATAPUNT_AUTHZ = {
     "PROTECTED": [
         ("/", ["GET", "HEAD", "TRACE"], [SCOPE_BS_READ]),
         ("/", ["POST", "PUT", "DELETE", "PATCH"], [SCOPE_BS_WRITE]),
-    ]
+    ],
 }
 
 if BASE_URL:
@@ -215,7 +221,7 @@ if BASE_URL:
     # Requests that come directly from consul internally will have
     # the base url prepended. This is mainly the case for the health check
     # used during deploy. Therefore explicitly add it here
-    DATAPUNT_AUTHZ['FORCED_ANONYMOUS_ROUTES'].append(f"{BASE_URL}/status/")
+    DATAPUNT_AUTHZ["FORCED_ANONYMOUS_ROUTES"].append(f"{BASE_URL}/status/")
 
 # when testing we use a static test key
 if strtobool(os.getenv("USE_JWKS_TEST_KEY", "False")):
@@ -241,7 +247,7 @@ if strtobool(os.getenv("USE_JWKS_TEST_KEY", "False")):
         }
     """
 
-    DATAPUNT_AUTHZ['JWKS'] = JWKS_TEST_KEY
+    DATAPUNT_AUTHZ["JWKS"] = JWKS_TEST_KEY
 
 # drf_yasg Swagger generation settings
 SWAGGER_SETTINGS = {
@@ -261,7 +267,6 @@ OBJECTSTORE_UPLOAD_CONTAINER_NAME = os.environ["OBJECTSTORE_UPLOAD_CONTAINER_NAM
 OBJECTSTORE_ENV = os.environ["OBJECTSTORE_ENV"]
 
 if DEBUG:
-
     INSTALLED_APPS += (
         "debug_toolbar",
         "corsheaders",
@@ -288,4 +293,4 @@ if DEBUG:
         "debug_toolbar.panels.profiling.ProfilingPanel",
     ]
 
-DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"

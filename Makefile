@@ -70,7 +70,7 @@ trivy: 							## Detect image vulnerabilities
 lintfix:                            ## Execute lint fixes
 	$(run) test black /src/$(APP) /tests/$(APP)
 	$(run) test autoflake /src --recursive --in-place --remove-unused-variables --remove-all-unused-imports --quiet
-	$(run) test isort /src/$(APP) /app/tests/$(APP)
+	$(run) test isort /src/$(APP) /tests/$(APP)
 
 
 lint:                               ## Execute lint checks

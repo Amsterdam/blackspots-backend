@@ -4,30 +4,29 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('blackspots', '0011_spot_wegvak'),
+        ("blackspots", "0011_spot_wegvak"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='spot',
-            name='eind_uitvoering',
+            model_name="spot",
+            name="eind_uitvoering",
             field=models.CharField(blank=True, max_length=64, null=True),
         ),
         migrations.AddField(
-            model_name='spot',
-            name='notes',
+            model_name="spot",
+            name="notes",
             field=models.TextField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='spot',
-            name='start_uitvoering',
+            model_name="spot",
+            name="start_uitvoering",
             field=models.CharField(blank=True, max_length=64, null=True),
         ),
         migrations.AddField(
-            model_name='spot',
-            name='tasks',
+            model_name="spot",
+            name="tasks",
             field=models.TextField(blank=True, null=True),
         ),
     ]

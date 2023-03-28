@@ -5,15 +5,16 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('blackspots', '0020_rename_wegvak_spot_polygoon'),
+        ("blackspots", "0020_rename_wegvak_spot_polygoon"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='spot',
-            name='point',
-            field=django.contrib.gis.db.models.fields.PointField(blank=True, null=True, srid=4326),
+            model_name="spot",
+            name="point",
+            field=django.contrib.gis.db.models.fields.PointField(
+                blank=True, null=True, srid=4326
+            ),
         ),
     ]

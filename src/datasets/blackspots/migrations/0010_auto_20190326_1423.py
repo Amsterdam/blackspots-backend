@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('blackspots', '0009_spot_actiehouders'),
+        ("blackspots", "0009_spot_actiehouders"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='document',
-            name='filename',
+            model_name="document",
+            name="filename",
             field=models.CharField(max_length=256),
         ),
     ]

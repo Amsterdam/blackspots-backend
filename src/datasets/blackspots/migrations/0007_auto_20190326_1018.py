@@ -4,30 +4,29 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('blackspots', '0006_auto_20190326_0950'),
+        ("blackspots", "0006_auto_20190326_0950"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='spot',
-            name='jaar_blackspotlijst',
+            model_name="spot",
+            name="jaar_blackspotlijst",
             field=models.IntegerField(blank=True, null=True),
         ),
         migrations.AlterField(
-            model_name='spot',
-            name='jaar_ongeval_quickscan',
+            model_name="spot",
+            name="jaar_ongeval_quickscan",
             field=models.IntegerField(blank=True, null=True),
         ),
         migrations.AlterField(
-            model_name='spot',
-            name='jaar_oplevering',
+            model_name="spot",
+            name="jaar_oplevering",
             field=models.IntegerField(blank=True, null=True),
         ),
         migrations.AlterField(
-            model_name='spot',
-            name='stadsdeel',
+            model_name="spot",
+            name="stadsdeel",
             field=models.CharField(blank=True, max_length=3, null=True),
         ),
     ]

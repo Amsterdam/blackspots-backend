@@ -9,8 +9,10 @@ from django.db.models import query
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
-from rest_framework_gis.serializers import GeoFeatureModelSerializer, \
-    GeometrySerializerMethodField
+from rest_framework_gis.serializers import (
+    GeoFeatureModelSerializer,
+    GeometrySerializerMethodField,
+)
 
 from api.bag_geosearch import BagGeoSearchAPI
 from datasets.blackspots.models import Document, Spot
@@ -22,13 +24,13 @@ logger = logging.getLogger(__name__)
 class DocumentSerializer(HALSerializer):
     spot = serializers.HyperlinkedRelatedField(
         read_only=True,
-        view_name='spot-detail',
-        lookup_field='id',
+        view_name="spot-detail",
+        lookup_field="id",
     )
 
     class Meta(object):
         model = Document
-        fields = '__all__'
+        fields = "__all__"
 
 
 class SpotDocumentSerializer(HALSerializer):
@@ -36,12 +38,12 @@ class SpotDocumentSerializer(HALSerializer):
 
     class Meta(object):
         model = Document
-        exclude = ['spot']
+        exclude = ["spot"]
 
 
 class SpotGeojsonSerializer(GeoFeatureModelSerializer):
     id = serializers.ReadOnlyField()
-    stadsdeel = serializers.CharField(source='get_stadsdeel_display', read_only=True)
+    stadsdeel = serializers.CharField(source="get_stadsdeel_display", read_only=True)
     documents = SpotDocumentSerializer(many=True, read_only=True)
 
     point_or_polygoon = GeometrySerializerMethodField()
@@ -56,14 +58,12 @@ class SpotGeojsonSerializer(GeoFeatureModelSerializer):
 
     class Meta(object):
         model = Spot
-        fields = '__all__'
-        geo_field = 'point_or_polygoon'
+        fields = "__all__"
+        geo_field = "point_or_polygoon"
 
         # Detail url is constructed using location_id instead of pk,
         # see: https://www.django-rest-framework.org/api-guide/serializers/#how-hyperlinked-views-are-determined # noqa: 501
-        extra_kwargs = {
-            '_links': {'lookup_field': 'id'}
-        }
+        extra_kwargs = {"_links": {"lookup_field": "id"}}
 
 
 class DisplayChoiceField(serializers.ChoiceField):
@@ -73,7 +73,7 @@ class DisplayChoiceField(serializers.ChoiceField):
     """
 
     def to_representation(self, value):
-        if value in ('', None):
+        if value in ("", None):
             return value
         return self.choices.get(six.text_type(value), value)
 
@@ -95,34 +95,45 @@ class SpotSerializer(HALSerializer):
         return attrs
 
     def validate_spot_types(self, attrs):
-        spot_type = attrs.get('spot_type')
+        spot_type = attrs.get("spot_type")
         if spot_type in [Spot.SpotType.blackspot, Spot.SpotType.wegvak]:
-            if not attrs.get('jaar_blackspotlijst'):
-                raise serializers.ValidationError({
-                    'jaar_blackspotlijst': [
-                        _("jaar_blackspotlijst is required for spot types 'blackspot' and 'wegvak'")
-                    ]
-                })
+            if not attrs.get("jaar_blackspotlijst"):
+                raise serializers.ValidationError(
+                    {
+                        "jaar_blackspotlijst": [
+                            _(
+                                "jaar_blackspotlijst is required for spot types 'blackspot' and 'wegvak'"
+                            )
+                        ]
+                    }
+                )
         else:
             # type is not blackspot or redroute, so we need to make sure jaar_blackspotlijst is empty
             # note that by setting the attribute to None, it will be emptied in the db.
-            attrs['jaar_blackspotlijst'] = None
+            attrs["jaar_blackspotlijst"] = None
 
-        if spot_type in [Spot.SpotType.protocol_ernstig, Spot.SpotType.protocol_dodelijk]:
-            if not attrs.get('jaar_ongeval_quickscan'):
-                raise serializers.ValidationError({
-                    'jaar_ongeval_quickscan': [
-                        _("jaar_ongeval_quickscan is required for spot types "
-                          "'protocol_ernstig' and 'protocol_dodelijk'")
-                    ]
-                })
+        if spot_type in [
+            Spot.SpotType.protocol_ernstig,
+            Spot.SpotType.protocol_dodelijk,
+        ]:
+            if not attrs.get("jaar_ongeval_quickscan"):
+                raise serializers.ValidationError(
+                    {
+                        "jaar_ongeval_quickscan": [
+                            _(
+                                "jaar_ongeval_quickscan is required for spot types "
+                                "'protocol_ernstig' and 'protocol_dodelijk'"
+                            )
+                        ]
+                    }
+                )
         else:
             # type is not protocol_*, so we need to make sure jaar_ongeval_quickscan is empty
             # note that by setting the attribute to None, it will be emptied in the db.
-            attrs['jaar_ongeval_quickscan'] = None
+            attrs["jaar_ongeval_quickscan"] = None
 
     def validate_point_or_polygoon(self, attrs):
-        spot_type = attrs.get('spot_type')
+        spot_type = attrs.get("spot_type")
         if not spot_type:
             # if we can't determine spot_type, we can't validate (this happens during patch)
             return
@@ -130,33 +141,46 @@ class SpotSerializer(HALSerializer):
         if spot_type in [
             Spot.SpotType.blackspot,
             Spot.SpotType.protocol_dodelijk,
-            Spot.SpotType.protocol_ernstig]:
+            Spot.SpotType.protocol_ernstig,
+        ]:
             # spot must always have a coordinate (point)
-            if not attrs.get('point'):
-                raise serializers.ValidationError({'point': [_("This spot type requires a point.")]})
+            if not attrs.get("point"):
+                raise serializers.ValidationError(
+                    {"point": [_("This spot type requires a point.")]}
+                )
 
             # empty polygoon because its a point type
-            attrs['polygoon'] = None
+            attrs["polygoon"] = None
         elif spot_type == Spot.SpotType.wegvak:
             # wegvak (red route) must always have a polygon
-            if not attrs.get('polygoon'):
-                raise serializers.ValidationError({'polygoon': [_("This spot type requires a polygon.")]})
+            if not attrs.get("polygoon"):
+                raise serializers.ValidationError(
+                    {"polygoon": [_("This spot type requires a polygon.")]}
+                )
 
             # empty point because its a polygon type
-            attrs['point'] = None
+            attrs["point"] = None
         else:
             # other spot types can either be polygon or point, but exactly one of them must be filled
-            if not attrs.get('polygoon') and not attrs.get('point'):
+            if not attrs.get("polygoon") and not attrs.get("point"):
                 raise serializers.ValidationError(
-                    {'point': [_("This spot type requires either a point or polygon.")]},
-                    {'polygoon': [_("This spot type requires either a point or polygon.")]},
+                    {
+                        "point": [
+                            _("This spot type requires either a point or polygon.")
+                        ]
+                    },
+                    {
+                        "polygoon": [
+                            _("This spot type requires either a point or polygon.")
+                        ]
+                    },
                 )
 
     def validate_geo_stadsdeel(self, attrs):
         # determine stadsdeel from point/poly if its unknown
-        stadsdeel = attrs.get('stadsdeel')
-        point = attrs.get('point')
-        polygon = attrs.get('polygon')
+        stadsdeel = attrs.get("stadsdeel")
+        point = attrs.get("point")
+        polygon = attrs.get("polygon")
         if (point or polygon) and not stadsdeel:
             if not point:
                 point = polygon[0][0]
@@ -165,12 +189,26 @@ class SpotSerializer(HALSerializer):
             stadsdeel = self.determine_stadsdeel(point)
             if stadsdeel == Spot.Stadsdelen.Geen:
                 raise serializers.ValidationError(
-                    {'point': [_('Point is outside Gemeente Amsterdam. To which stadsdeel does the location belong?')]})
+                    {
+                        "point": [
+                            _(
+                                "Point is outside Gemeente Amsterdam. To which stadsdeel does the location belong?"
+                            )
+                        ]
+                    }
+                )
             elif stadsdeel == Spot.Stadsdelen.BagFout:
                 raise serializers.ValidationError(
-                    {'point': [_('An error occured finding the stadsdeel. '
-                                 'To which stadsdeel does the location belong?')]})
-            attrs['stadsdeel'] = stadsdeel
+                    {
+                        "point": [
+                            _(
+                                "An error occured finding the stadsdeel. "
+                                "To which stadsdeel does the location belong?"
+                            )
+                        ]
+                    }
+                )
+            attrs["stadsdeel"] = stadsdeel
 
     def determine_stadsdeel(self, point):
         lat = point.y
@@ -178,24 +216,34 @@ class SpotSerializer(HALSerializer):
         return BagGeoSearchAPI().get_stadsdeel(lat=lat, lon=lon)
 
     def create(self, validated_data):
-        rapport_file = validated_data.pop('rapport_document', None)
-        design_file = validated_data.pop('design_document', None)
+        rapport_file = validated_data.pop("rapport_document", None)
+        design_file = validated_data.pop("design_document", None)
 
         spot = super().create(validated_data)
         self.handle_documents(spot, rapport_file, design_file)
         return spot
 
     def update(self, instance, validated_data):
-        if 'rapport_document' in validated_data and validated_data['rapport_document'] is None:
+        if (
+            "rapport_document" in validated_data
+            and validated_data["rapport_document"] is None
+        ):
             # delete rapport_document
-            self.delete_document(spot=instance, document_type=Document.DocumentType.Rapportage)
+            self.delete_document(
+                spot=instance, document_type=Document.DocumentType.Rapportage
+            )
 
-        if 'design_document' in validated_data and validated_data['design_document'] is None:
+        if (
+            "design_document" in validated_data
+            and validated_data["design_document"] is None
+        ):
             # delete design document
-            self.delete_document(spot=instance, document_type=Document.DocumentType.Ontwerp)
+            self.delete_document(
+                spot=instance, document_type=Document.DocumentType.Ontwerp
+            )
 
-        rapport_file = validated_data.pop('rapport_document', None)
-        design_file = validated_data.pop('design_document', None)
+        rapport_file = validated_data.pop("rapport_document", None)
+        design_file = validated_data.pop("design_document", None)
 
         spot = super().update(instance, validated_data)
         self.handle_documents(spot, rapport_file, design_file)
@@ -208,15 +256,18 @@ class SpotSerializer(HALSerializer):
             objstore.delete(document)
             document.delete()
         else:
-            logger.error(f"Delete document was called for spot {spot.id} and document_type {document_type}, "
-                         f"but it does not exist in our database")
+            logger.error(
+                f"Delete document was called for spot {spot.id} and document_type {document_type}, "
+                f"but it does not exist in our database"
+            )
 
     def handle_documents(self, spot, rapport_file=None, design_file=None):
         objstore = ObjectStore(settings.OBJECTSTORE_CONNECTION_CONFIG)
         if rapport_file:
             try:
                 rapport_document, created = Document.objects.get_or_create(
-                    type=Document.DocumentType.Rapportage, spot=spot)
+                    type=Document.DocumentType.Rapportage, spot=spot
+                )
                 objstore.upload(rapport_file, rapport_document)
             except:  # noqa E722 - ignore flake8 check, using bare except
                 raise
@@ -224,20 +275,19 @@ class SpotSerializer(HALSerializer):
         if design_file:
             try:
                 design_document, created = Document.objects.get_or_create(
-                    type=Document.DocumentType.Ontwerp, spot=spot)
+                    type=Document.DocumentType.Ontwerp, spot=spot
+                )
                 objstore.upload(design_file, design_document)
             except:  # noqa E722 - ignore flake8 check, using bare except
                 raise
 
     class Meta(object):
         model = Spot
-        fields = '__all__'
+        fields = "__all__"
 
         # Detail url is constructed using location_id instead of pk,
         # see: https://www.django-rest-framework.org/api-guide/serializers/#how-hyperlinked-views-are-determined # noqa: 501
-        extra_kwargs = {
-            '_links': {'lookup_field': 'id'}
-        }
+        extra_kwargs = {"_links": {"lookup_field": "id"}}
 
 
 class GeneratorListSerializer(serializers.ListSerializer):
@@ -271,13 +321,13 @@ class GeneratorListSerializer(serializers.ListSerializer):
 
 
 class SpotCSVSerializer(ModelSerializer):
-    stadsdeel = serializers.CharField(source='get_stadsdeel_display')
-    type = serializers.CharField(source='spot_type')
-    nummer = serializers.CharField(source='locatie_id')
-    locatie_omschrijving = serializers.CharField(source='description')
-    status = serializers.CharField(source='get_status_display')
-    taken = serializers.CharField(source='tasks')
-    aantekeningen = serializers.CharField(source='notes')
+    stadsdeel = serializers.CharField(source="get_stadsdeel_display")
+    type = serializers.CharField(source="spot_type")
+    nummer = serializers.CharField(source="locatie_id")
+    locatie_omschrijving = serializers.CharField(source="description")
+    status = serializers.CharField(source="get_status_display")
+    taken = serializers.CharField(source="tasks")
+    aantekeningen = serializers.CharField(source="notes")
     latitude = serializers.SerializerMethodField()
     longitude = serializers.SerializerMethodField()
 
@@ -290,22 +340,22 @@ class SpotCSVSerializer(ModelSerializer):
     class Meta:
         model = Spot
         fields = [
-            'stadsdeel',
-            'type',
-            'nummer',
-            'locatie_omschrijving',
-            'status',
-            'actiehouders',
-            'taken',
-            'start_uitvoering',
-            'eind_uitvoering',
-            'jaar_blackspotlijst',
-            'jaar_ongeval_quickscan',
-            'jaar_oplevering',
-            'jaar_opgenomen_in_ivm_lijst',
-            'aantekeningen',
-            'latitude',
-            'longitude',
+            "stadsdeel",
+            "type",
+            "nummer",
+            "locatie_omschrijving",
+            "status",
+            "actiehouders",
+            "taken",
+            "start_uitvoering",
+            "eind_uitvoering",
+            "jaar_blackspotlijst",
+            "jaar_ongeval_quickscan",
+            "jaar_oplevering",
+            "jaar_opgenomen_in_ivm_lijst",
+            "aantekeningen",
+            "latitude",
+            "longitude",
         ]
 
         list_serializer_class = GeneratorListSerializer

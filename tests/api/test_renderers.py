@@ -4,11 +4,11 @@ from api.renderers import StreamingCSVRenderer
 
 
 class RenderersTestCase(TestCase):
-    fieldnames = ['a', 'b', 'c', 'd']
+    fieldnames = ["a", "b", "c", "d"]
     data = [
-        {'a': '1', 'b': '2', 'c': '3', 'd': '4'},
-        {'a': '11', 'b': '12', 'c': '13', 'd': '14'},
-        {'a': '21', 'b': '22', 'c': '23', 'd': '24'},
+        {"a": "1", "b": "2", "c": "3", "d": "4"},
+        {"a": "11", "b": "12", "c": "13", "d": "14"},
+        {"a": "21", "b": "22", "c": "23", "d": "24"},
     ]
 
     def test_streaming_csv_render(self):

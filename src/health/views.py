@@ -13,7 +13,9 @@ def health(request):
         log.exception("Debug mode not allowed in production")
         return HttpResponse(
             "Debug mode not allowed in production",
-            content_type="text/plain", status=500)
+            content_type="text/plain",
+            status=500,
+        )
 
     # check database
     try:
@@ -23,8 +25,7 @@ def health(request):
     except Exception as e:
         log.exception(f"Database connectivity failed: {str(e)}")
         return HttpResponse(
-            "Database connectivity failed",
-            content_type="text/plain", status=500)
+            "Database connectivity failed", content_type="text/plain", status=500
+        )
 
-    return HttpResponse(
-        "Connectivity OK", content_type='text/plain', status=200)
+    return HttpResponse("Connectivity OK", content_type="text/plain", status=200)

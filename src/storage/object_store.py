@@ -3,17 +3,17 @@ import os
 from typing import List, Tuple
 
 from django.conf import settings
-from objectstore import get_full_container_list, get_connection
+from objectstore import get_connection, get_full_container_list
 from swiftclient import ClientException
 
 from datasets.blackspots.models import Document
 
-DIR_CONTENT_TYPE = 'application/directory'
+DIR_CONTENT_TYPE = "application/directory"
 
-XLS_OBJECT_NAME = 'VVP_Blackspot_Voortgangslijst_Kaart_actueel.xls'
-DOWNLOAD_DIR = '/tmp/blackspots/'
-WBA_CONTAINER_NAME = f'wbalijst'
-DOC_CONTAINER_NAME = f'doc'
+XLS_OBJECT_NAME = "VVP_Blackspot_Voortgangslijst_Kaart_actueel.xls"
+DOWNLOAD_DIR = "/tmp/blackspots/"
+WBA_CONTAINER_NAME = f"wbalijst"
+DOC_CONTAINER_NAME = f"doc"
 
 DocumentList = List[Tuple[str, str]]
 
@@ -21,7 +21,6 @@ logger = logging.getLogger(__name__)
 
 
 class ObjectStore:
-
     def __init__(self, config):
         self.config = config
         super().__init__()
@@ -51,7 +50,7 @@ class ObjectStore:
         logger.info("Done deleting file from objectstore")
 
     def get_document(self, connection, container_name: str, object_name: str):
-        logger.debug(f'Fetching file from objectstore: {container_name}, {object_name}')
+        logger.debug(f"Fetching file from objectstore: {container_name}, {object_name}")
         return connection.get_object(container_name, object_name)
 
     def get_wba_documents_list(self, connection) -> DocumentList:
@@ -61,11 +60,13 @@ class ObjectStore:
         :return: Array of documents in the form:
         [('rapportage', 'QE1_rapportage_Some_where - some extra info.pdf'), ... ]
         """
-        documents_meta = get_full_container_list(connection, container=settings.OBJECTSTORE_ENV,
-                                                 prefix=DOC_CONTAINER_NAME)
+        documents_meta = get_full_container_list(
+            connection, container=settings.OBJECTSTORE_ENV, prefix=DOC_CONTAINER_NAME
+        )
         documents_paths = [
-            meta.get('name') for meta in documents_meta if
-            meta.get('content_type') != DIR_CONTENT_TYPE
+            meta.get("name")
+            for meta in documents_meta
+            if meta.get("content_type") != DIR_CONTENT_TYPE
         ]
         return list(map(os.path.split, documents_paths))
 
@@ -77,21 +78,25 @@ class ObjectStore:
         :param path: the path where the object is stored you want to download
         :param object_name: The name of the object you want to download
         """
-        os.makedirs(f'{DOWNLOAD_DIR}{container_name}/{path}', exist_ok=True)
-        output_path = os.path.join(f'{DOWNLOAD_DIR}{container_name}/{path}', object_name)
+        os.makedirs(f"{DOWNLOAD_DIR}{container_name}/{path}", exist_ok=True)
+        output_path = os.path.join(
+            f"{DOWNLOAD_DIR}{container_name}/{path}", object_name
+        )
 
         logger.info(f"Fetching file: {path}/{object_name}")
-        new_data = connection.get_object(container_name, f'{path}/{object_name}')[1]
-        with open(output_path, 'wb') as file:
+        new_data = connection.get_object(container_name, f"{path}/{object_name}")[1]
+        with open(output_path, "wb") as file:
             file.write(new_data)
         return output_path
 
     def fetch_spots(self, connection):
-        return self.get_file(connection, settings.OBJECTSTORE_ENV, WBA_CONTAINER_NAME, XLS_OBJECT_NAME)
+        return self.get_file(
+            connection, settings.OBJECTSTORE_ENV, WBA_CONTAINER_NAME, XLS_OBJECT_NAME
+        )
 
     @staticmethod
     def get_container_path(document_type):
         if document_type == Document.DocumentType.Ontwerp:
-            return f'{settings.OBJECTSTORE_UPLOAD_CONTAINER_NAME}/doc/ontwerp'
+            return f"{settings.OBJECTSTORE_UPLOAD_CONTAINER_NAME}/doc/ontwerp"
         else:
-            return f'{settings.OBJECTSTORE_UPLOAD_CONTAINER_NAME}/doc/rapportage'
+            return f"{settings.OBJECTSTORE_UPLOAD_CONTAINER_NAME}/doc/rapportage"

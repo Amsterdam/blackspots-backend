@@ -4,15 +4,24 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('blackspots', '0013_auto_20191120_1610'),
+        ("blackspots", "0013_auto_20191120_1610"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='spot',
-            name='status',
-            field=models.CharField(choices=[('voorbereiding', 'voorbereiding'), ('onderzoek ontwerp', 'onderzoek ontwerp'), ('gereed', 'gereed'), ('geen maatregel', 'geen maatregel'), ('uitvoering', 'uitvoering'), ('onbekend', 'onbekend')], max_length=32),
+            model_name="spot",
+            name="status",
+            field=models.CharField(
+                choices=[
+                    ("voorbereiding", "voorbereiding"),
+                    ("onderzoek ontwerp", "onderzoek ontwerp"),
+                    ("gereed", "gereed"),
+                    ("geen maatregel", "geen maatregel"),
+                    ("uitvoering", "uitvoering"),
+                    ("onbekend", "onbekend"),
+                ],
+                max_length=32,
+            ),
         ),
     ]

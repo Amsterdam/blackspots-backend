@@ -4,15 +4,14 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('blackspots', '0019_spot_jaar_opgenomen_in_ivm_lijst'),
+        ("blackspots", "0019_spot_jaar_opgenomen_in_ivm_lijst"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='spot',
-            old_name='wegvak',
-            new_name='polygoon',
+            model_name="spot",
+            old_name="wegvak",
+            new_name="polygoon",
         ),
     ]

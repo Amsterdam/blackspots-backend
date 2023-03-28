@@ -15,18 +15,21 @@ log = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
-    help = 'Import blackspots from objectstore'
+    help = "Import blackspots from objectstore"
 
     def add_arguments(self, parser):
         # useful for local testing / debugging
-        parser.add_argument('--xls_path', type=str, default=None)
-        parser.add_argument('--remove_existing_data', action='store_true',
-                            help='add --remove_existing_data to clean all records from the db before importing')
+        parser.add_argument("--xls_path", type=str, default=None)
+        parser.add_argument(
+            "--remove_existing_data",
+            action="store_true",
+            help="add --remove_existing_data to clean all records from the db before importing",
+        )
 
     def handle(self, *args, **options):
-        if not (xls_path := options.get('xls_path')):
-            assert os.getenv('OBJECTSTORE_PASSWORD')
-        perform_import(xls_path, options['remove_existing_data'])
+        if not (xls_path := options.get("xls_path")):
+            assert os.getenv("OBJECTSTORE_PASSWORD")
+        perform_import(xls_path, options["remove_existing_data"])
 
 
 def perform_import(xls_path: Optional[str], remove_existing_data: bool):
@@ -37,25 +40,25 @@ def perform_import(xls_path: Optional[str], remove_existing_data: bool):
     """
 
     if remove_existing_data:
-        log.info('Clearing models')
+        log.info("Clearing models")
         clear_models()
 
     document_list = None
     if xls_path is None:
         objstore = ObjectStore(config=settings.OBJECTSTORE_CONNECTION_CONFIG)
 
-        log.info('Opening object store connection')
+        log.info("Opening object store connection")
         connection = objstore.get_connection()
 
-        log.info('Getting documents list')
+        log.info("Getting documents list")
         document_list = objstore.get_wba_documents_list(connection)
-        log.info(f'document list size: {len(document_list)}')
+        log.info(f"document list size: {len(document_list)}")
 
-        log.info('Fetching xls file')
+        log.info("Fetching xls file")
         xls_path = objstore.fetch_spots(connection)
 
-    log.info('Importing xls file')
+    log.info("Importing xls file")
     process_xls(xls_path, document_list)
 
-    log.info(f'Spot count: {Spot.objects.all().count()}')
-    log.info(f'Document count: {Document.objects.all().count()}')
+    log.info(f"Spot count: {Spot.objects.all().count()}")
+    log.info(f"Document count: {Document.objects.all().count()}")

@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('blackspots', '0018_alter_spot_spot_type'),
+        ("blackspots", "0018_alter_spot_spot_type"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='spot',
-            name='jaar_opgenomen_in_ivm_lijst',
+            model_name="spot",
+            name="jaar_opgenomen_in_ivm_lijst",
             field=models.IntegerField(blank=True, null=True),
         ),
     ]

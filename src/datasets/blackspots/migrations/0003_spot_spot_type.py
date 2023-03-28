@@ -4,16 +4,25 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('blackspots', '0002_auto_20190214_1250'),
+        ("blackspots", "0002_auto_20190214_1250"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='spot',
-            name='spot_type',
-            field=models.CharField(choices=[('Blackspot', 'Blackspot'), ('Wegvak', 'Wegvak'), ('Protocol_ernstig', 'Protocol ernstig'), ('Protocol_dodelijk', 'Protocol dodelijk'), ('Risico', 'Risico')], default='Blackspot', max_length=24),
+            model_name="spot",
+            name="spot_type",
+            field=models.CharField(
+                choices=[
+                    ("Blackspot", "Blackspot"),
+                    ("Wegvak", "Wegvak"),
+                    ("Protocol_ernstig", "Protocol ernstig"),
+                    ("Protocol_dodelijk", "Protocol dodelijk"),
+                    ("Risico", "Risico"),
+                ],
+                default="Blackspot",
+                max_length=24,
+            ),
             preserve_default=False,
         ),
     ]

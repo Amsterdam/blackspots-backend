@@ -11,7 +11,6 @@ logger = logging.getLogger(__name__)
 
 
 class BagGeoSearchAPI:
-
     FEATURE_STADSDEEL = "gebieden/stadsdeel"
     FEATURE_ITEM_STADSDEEL = "stadsdeel"
 
@@ -22,18 +21,18 @@ class BagGeoSearchAPI:
             response = requests.get(
                 url,
                 params={
-                    'item': BagGeoSearchAPI.FEATURE_ITEM_STADSDEEL,
-                    'lon': lon,
-                    'lat': lat,
+                    "item": BagGeoSearchAPI.FEATURE_ITEM_STADSDEEL,
+                    "lon": lon,
+                    "lat": lat,
                 },
             )
             response.raise_for_status()
             content = response.json()
-            features = content.get('features', [])
+            features = content.get("features", [])
             for feature in features:
-                properties = feature.get('properties', {})
-                if properties.get('type') == BagGeoSearchAPI.FEATURE_STADSDEEL:
-                    stadsdeel_code = properties.get('code')
+                properties = feature.get("properties", {})
+                if properties.get("type") == BagGeoSearchAPI.FEATURE_STADSDEEL:
+                    stadsdeel_code = properties.get("code")
                     return get_stadsdeel(stadsdeel_code)
         except (RequestException, ValueError):
             logger.exception("Failed to get stadsdeel from lat/lon")

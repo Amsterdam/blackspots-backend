@@ -9,9 +9,17 @@ It ain't nice, but it works well.
 """
 
 rest_framework_gis = [
-    _("Invalid format: string or unicode input unrecognized as GeoJSON, WKT EWKT or HEXEWKB."),
-    _("Unable to convert to python object: Invalid geometry pointer returned from 'OGR_G_CreateGeometryFromJson'."),
-    _("Unable to convert to python object: String input unrecognized as WKT EWKT, and HEXEWKB."),
-    _("Unable to convert to python object: String or unicode input unrecognized as WKT EWKT, and HEXEWKB."),
-    _("Unable to convert to python object: Improper geometry input type:")
+    _(
+        "Invalid format: string or unicode input unrecognized as GeoJSON, WKT EWKT or HEXEWKB."
+    ),
+    _(
+        "Unable to convert to python object: Invalid geometry pointer returned from 'OGR_G_CreateGeometryFromJson'."
+    ),
+    _(
+        "Unable to convert to python object: String input unrecognized as WKT EWKT, and HEXEWKB."
+    ),
+    _(
+        "Unable to convert to python object: String or unicode input unrecognized as WKT EWKT, and HEXEWKB."
+    ),
+    _("Unable to convert to python object: Improper geometry input type:"),
 ]

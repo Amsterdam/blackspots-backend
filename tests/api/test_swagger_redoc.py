@@ -10,14 +10,15 @@ class TestDocumentProxy(TestCase):
     """
     Verifies objectstore proxy working correctly
     """
+
     def test_swagger_yaml(self):
-        url = reverse('swagger-schema', format='.yaml')
+        url = reverse("swagger-schema", format=".yaml")
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertIn('Blackspots API', str(response.content))
+        self.assertIn("Blackspots API", str(response.content))
 
     def test_redoc_page(self):
-        url = reverse('schema-redoc')
+        url = reverse("schema-redoc")
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertIn('Blackspots API', str(response.content))
+        self.assertIn("Blackspots API", str(response.content))

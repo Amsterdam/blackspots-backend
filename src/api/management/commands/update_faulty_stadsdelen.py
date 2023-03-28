@@ -10,8 +10,10 @@ logger = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
-    help = 'Try to determine the stadsdeel for each Spot where stadsdeel ' \
-           'is unknown due to earlier connection errors'
+    help = (
+        "Try to determine the stadsdeel for each Spot where stadsdeel "
+        "is unknown due to earlier connection errors"
+    )
 
     def handle(self, *args, **options):
         spots = Spot.objects.filter(stadsdeel=Spot.Stadsdelen.BagFout)

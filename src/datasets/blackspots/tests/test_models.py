@@ -7,14 +7,15 @@ from datasets.blackspots.models import Document, Spot
 
 class TestSpot(TestCase):
     def test_str(self):
-        spot = baker.prepare(Spot, locatie_id='abcdef', spot_type=Spot.SpotType.blackspot)
-        self.assertEqual(str(spot), 'abcdef: blackspot')
+        spot = baker.prepare(
+            Spot, locatie_id="abcdef", spot_type=Spot.SpotType.blackspot
+        )
+        self.assertEqual(str(spot), "abcdef: blackspot")
 
 
 class TestDocument(TestCase):
-
-    @mock.patch('datasets.blackspots.models.Document._generate_filename')
-    @mock.patch('django.contrib.gis.db.models.Model.save')
+    @mock.patch("datasets.blackspots.models.Document._generate_filename")
+    @mock.patch("django.contrib.gis.db.models.Model.save")
     def test_save_without_filename(self, mocked_save, mocked_name_generator):
         """
         Test and assert that saving a Document without a filename
@@ -26,10 +27,10 @@ class TestDocument(TestCase):
         document = baker.prepare(Document, spot=spot, filename=None)
         document.save()
         mocked_name_generator.assert_called()
-        self.assertEqual(document.filename, 'filename.txt')
+        self.assertEqual(document.filename, "filename.txt")
 
-    @mock.patch('datasets.blackspots.models.Document._generate_filename')
-    @mock.patch('django.contrib.gis.db.models.Model.save')
+    @mock.patch("datasets.blackspots.models.Document._generate_filename")
+    @mock.patch("django.contrib.gis.db.models.Model.save")
     def test_save_with_filename(self, mocked_save, mocked_name_generator):
         """
         Test and assert that saving a Document with a filename will
@@ -37,10 +38,10 @@ class TestDocument(TestCase):
         """
         mocked_save.return_value = None
         spot = baker.prepare(Spot)
-        document = baker.prepare(Document, spot=spot, filename='doc_filename.txt')
+        document = baker.prepare(Document, spot=spot, filename="doc_filename.txt")
         document.save()
         mocked_name_generator.assert_not_called()
-        self.assertEqual(document.filename, 'doc_filename.txt')
+        self.assertEqual(document.filename, "doc_filename.txt")
 
     def test_generate_filename(self):
         """
@@ -49,9 +50,11 @@ class TestDocument(TestCase):
         therefore 'test desc' will become 'test_desc', and everything will be
         lowercase.
         """
-        spot = baker.prepare(Spot, locatie_id='EFGHIJ', description='test desc')
-        document = baker.prepare(Document, type=Document.DocumentType.Ontwerp, spot=spot, spot_id=1)
-        self.assertEqual(document._generate_filename(), 'EFGHIJ_ontwerp_test_desc.pdf')
+        spot = baker.prepare(Spot, locatie_id="EFGHIJ", description="test desc")
+        document = baker.prepare(
+            Document, type=Document.DocumentType.Ontwerp, spot=spot, spot_id=1
+        )
+        self.assertEqual(document._generate_filename(), "EFGHIJ_ontwerp_test_desc.pdf")
 
     def test_generate_filename_exception(self):
         """
@@ -60,9 +63,9 @@ class TestDocument(TestCase):
         its location_id and description will be part of the filename.
         """
         document = baker.prepare(Document, spot=None)
-        with self.assertRaises(Exception, msg='Spot must be set'):
+        with self.assertRaises(Exception, msg="Spot must be set"):
             document._generate_filename()
 
     def test_str(self):
-        document = baker.prepare(Document, filename='mocked_filename')
-        self.assertEqual(str(document), 'mocked_filename')
+        document = baker.prepare(Document, filename="mocked_filename")
+        self.assertEqual(str(document), "mocked_filename")

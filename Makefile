@@ -2,7 +2,7 @@
 # https://git.datapunt.amsterdam.nl/Datapunt/python-best-practices/blob/master/dependency_management/
 .PHONY: app
 dc = docker-compose
-run = $(dc) run
+run = $(dc) run --rm
 manage = $(run) --rm app python manage.py
 
 help:                               ## Show this help.
@@ -45,7 +45,7 @@ app:
 dev:
 	$(run) --service-ports dev
 
-test:
+test: lint
 	$(run) --rm test pytest $(ARGS)
 
 pdb:
@@ -66,3 +66,13 @@ update_stadsdeel_errors:
 trivy: 							## Detect image vulnerabilities
 	$(dc) build --no-cache app
 	trivy image --ignore-unfixed docker-registry.data.amsterdam.nl/datapunt/blackspots
+
+lintfix:                            ## Execute lint fixes
+	$(run) test black /src/$(APP) /tests/$(APP)
+	$(run) test autoflake /src --recursive --in-place --remove-unused-variables --remove-all-unused-imports --quiet
+	$(run) test isort /src/$(APP) /tests/$(APP)
+
+
+lint:                               ## Execute lint checks
+	$(run) test autoflake /src --check --recursive --quiet
+	$(run) test isort --diff --check /src/$(APP) /tests/$(APP)

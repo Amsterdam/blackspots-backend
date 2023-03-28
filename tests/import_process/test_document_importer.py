@@ -8,17 +8,21 @@ from import_process.process_xls import InputError, create_document
 
 
 class TestDocumentImporter(TestCase):
-
     def setUp(self):
         self.spot = baker.make(Spot)
 
     def test_correct_reference(self):
-        filename = 'foo_bar with spaces.pdf'
+        filename = "foo_bar with spaces.pdf"
         available_documents = [
-            ('rapportage', filename,),
+            (
+                "rapportage",
+                filename,
+            ),
         ]
 
-        create_document(available_documents, Document.DocumentType.Rapportage, filename, self.spot)
+        create_document(
+            available_documents, Document.DocumentType.Rapportage, filename, self.spot
+        )
 
         document = Document.objects.get()
         self.assertEqual(document.filename, filename)
@@ -27,19 +31,21 @@ class TestDocumentImporter(TestCase):
 
     @skip  # TODO activate when import is throwing exception
     def test_unavailable_reference(self):
-        filename = 'foo_bar with spaces.pdf'
+        filename = "foo_bar with spaces.pdf"
         available_documents = [
-            ('rapportage', filename,),
+            (
+                "rapportage",
+                filename,
+            ),
         ]
 
         self.assertRaises(
             InputError,
             create_document,
-
             available_documents,
             Document.DocumentType.Rapportage,
-            'other file name.pdf',
-            self.spot
+            "other file name.pdf",
+            self.spot,
         )
 
         self.assertEqual(Document.objects.count(), 0)

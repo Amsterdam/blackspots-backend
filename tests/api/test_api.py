@@ -2,11 +2,9 @@ import logging
 import random
 from unittest import mock
 
-import pytest
 from django.test import TransactionTestCase
 from model_bakery import baker, seq
 from rest_framework.reverse import reverse
-from rest_framework.test import APIClient
 
 from datasets.blackspots import models
 from datasets.blackspots.models import Document, Spot
@@ -19,6 +17,7 @@ class TestAPIEndpoints(TransactionTestCase, AuthorizationSetup):
     """
     Verifies that browsing the API works correctly.
     """
+
     reset_sequences = True
 
     def setUp(self):
@@ -27,7 +26,11 @@ class TestAPIEndpoints(TransactionTestCase, AuthorizationSetup):
         # generate 3 spots with locatie_ids test_1, test_2 and test_3
         baker.prepare(Document)  # because of this line the next bakery will work
         baker.make(
-            Spot, locatie_id=seq("test_"), actiehouders="Unknown", _quantity=3, _fill_optional=['polygoon', 'point']
+            Spot,
+            locatie_id=seq("test_"),
+            actiehouders="Unknown",
+            _quantity=3,
+            _fill_optional=["polygoon", "point"],
         )
         self.spot_with_docs = baker.make(Spot)
         baker.make(Document, spot=self.spot_with_docs, _quantity=3)
@@ -126,37 +129,40 @@ class TestAPIEndpoints(TransactionTestCase, AuthorizationSetup):
             # values we get from Django.
             "point": '{ "type": "Point", "coordinates": [ 4.9239022, 52.3875654 ] }',
             "polygoon": '{ "type": "Polygon", "coordinates": [ [ [ 52.3689977, 4.8780082 ], '
-            '[ 52.368998, 4.8779635 ], [ 52.3693862, 4.8776962 ], [ 52.3694042, 4.877723 ], [ 52.3689977, 4.8780082 ] ] ] }',
+            "[ 52.368998, 4.8779635 ], [ 52.3693862, 4.8776962 ], [ 52.3694042, 4.877723 ], [ 52.3689977, 4.8780082 ] ] ] }",
             "actiehouders": "Actiehouders test",
             "status": "voorbereiding",
-            "jaar_opgenomen_in_ivm_lijst": 2022
+            "jaar_opgenomen_in_ivm_lijst": 2022,
         }
 
         if spot_type in [Spot.SpotType.blackspot, Spot.SpotType.wegvak]:
             data["jaar_blackspotlijst"] = 2019
-        elif spot_type in [Spot.SpotType.protocol_ernstig, Spot.SpotType.protocol_dodelijk]:
+        elif spot_type in [
+            Spot.SpotType.protocol_ernstig,
+            Spot.SpotType.protocol_dodelijk,
+        ]:
             data["jaar_ongeval_quickscan"] = 2020
 
         response = self.write_client.post(url, data=data)
         self.assertStatusCode(url, response, expected_status=201)
 
-        spot = Spot.objects.get(locatie_id=data['locatie_id'])
-        assert spot.spot_type == data['spot_type']
+        spot = Spot.objects.get(locatie_id=data["locatie_id"])
+        assert spot.spot_type == data["spot_type"]
 
         # check point or polygon base on spot type
         if spot_type and spot_type in [
             Spot.SpotType.blackspot,
             Spot.SpotType.protocol_dodelijk,
-            Spot.SpotType.protocol_ernstig]:
-            assert spot.point.json == data['point']
+            Spot.SpotType.protocol_ernstig,
+        ]:
+            assert spot.point.json == data["point"]
         elif spot_type == Spot.SpotType.wegvak:
-            assert spot.polygoon.json == data['polygoon']
+            assert spot.polygoon.json == data["polygoon"]
         else:
             if spot.polygoon:
-                assert spot.polygoon.json == data['polygoon']
+                assert spot.polygoon.json == data["polygoon"]
             else:
-                assert spot.point.json == data['point']
-
+                assert spot.point.json == data["point"]
 
     @mock.patch("api.serializers.SpotSerializer.determine_stadsdeel")
     def test_spot_detail_post_auth_error(self, determine_stadsdeel):
@@ -202,7 +208,9 @@ class TestAPIEndpoints(TransactionTestCase, AuthorizationSetup):
             response = client.patch(url, data=data)
             self.assertStatusCode(url, response, 401)
             self.assertFalse(
-                Spot.objects.filter(actiehouders="Someone foobar", locatie_id="test_1").exists()
+                Spot.objects.filter(
+                    actiehouders="Someone foobar", locatie_id="test_1"
+                ).exists()
             )
 
     @mock.patch("api.serializers.SpotSerializer.determine_stadsdeel")
@@ -293,7 +301,11 @@ class TestAPIEndpoints(TransactionTestCase, AuthorizationSetup):
 
     def test_spot_detail_geojson(self):
         url = reverse(
-            "spot-detail", kwargs={"id": self.spot_with_docs.id, "format": "geojson",}
+            "spot-detail",
+            kwargs={
+                "id": self.spot_with_docs.id,
+                "format": "geojson",
+            },
         )
 
         response = self.read_client.get(url)
@@ -302,7 +314,11 @@ class TestAPIEndpoints(TransactionTestCase, AuthorizationSetup):
 
     def test_spot_detail_geojson_auth_error(self):
         url = reverse(
-            "spot-detail", kwargs={"id": self.spot_with_docs.id, "format": "geojson",}
+            "spot-detail",
+            kwargs={
+                "id": self.spot_with_docs.id,
+                "format": "geojson",
+            },
         )
 
         for client in [self.anon_client, self.write_client]:

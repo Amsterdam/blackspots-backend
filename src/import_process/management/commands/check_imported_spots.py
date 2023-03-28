@@ -7,11 +7,11 @@ from datasets.blackspots.models import Document, Spot
 logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger(__name__)
 
-OBJSTORE_METADATA = 'meta'
+OBJSTORE_METADATA = "meta"
 
 
 class Command(BaseCommand):
-    help = 'Import blackspots from objectstore'
+    help = "Import blackspots from objectstore"
 
     def handle(self, *args, **options):
         log.info("Check import")
@@ -21,14 +21,16 @@ class Command(BaseCommand):
 
 def assert_count(minimal, actual, message):
     if actual < minimal:
-        raise Exception("Import failed. {} minimal {}, actual {}".format(message, minimal, actual))
+        raise Exception(
+            "Import failed. {} minimal {}, actual {}".format(message, minimal, actual)
+        )
 
 
 def check_import():
-    log.info('Checking import')
-    log.info('Checking database count')
+    log.info("Checking import")
+    log.info("Checking database count")
 
-    assert_count(224, Spot.objects.count(), 'Spots count')
-    assert_count(164, Document.objects.count(), 'Documents count')
+    assert_count(224, Spot.objects.count(), "Spots count")
+    assert_count(164, Document.objects.count(), "Documents count")
 
-    log.info('Check done')
+    log.info("Check done")

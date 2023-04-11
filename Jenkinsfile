@@ -24,7 +24,7 @@ pipeline {
     environment {
         SHORT_UUID = sh( script: "head /dev/urandom | tr -dc A-Za-z0-9 | head -c10", returnStdout: true).trim()
         COMPOSE_PROJECT_NAME = "${PROJECT_NAME}-${env.SHORT_UUID}"
-        VERSION = env.BRANCH_NAME.replace('master', 'latest')
+        VERSION = env.BRANCH_NAME.replace('main', 'latest')
     }
 
     stages {
@@ -44,7 +44,7 @@ pipeline {
             when {
                 anyOf {
                     buildingTag()
-                    branch 'master'
+                    branch 'main'
                 }
             }
             steps {
@@ -56,7 +56,7 @@ pipeline {
 
         stage('Deploy to acceptance') {
             when {
-                branch 'master'
+                branch 'main'
             }
             steps {
                 sh 'VERSION=acceptance make push'

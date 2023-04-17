@@ -1,4 +1,4 @@
-Django<4  # Django 4 not yet supported by djangorestframework-gis
+Django<4.2  # Django 4.2 does not support Postgres 11
 python-swiftclient
 python-keystoneclient
 xlrd

@@ -14,13 +14,12 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.conf import settings
-from django.conf.urls import url
-from django.urls import include
+from django.urls import include, re_path
 from rest_framework_swagger.views import get_swagger_view
 
 urlpatterns = [
-    url(r"", include("api.urls")),
-    url(r"^status/", include("health.urls")),
+    re_path(r"", include("api.urls")),
+    re_path(r"^status/", include("health.urls")),
 ]
 
 
@@ -30,5 +29,5 @@ if settings.DEBUG:
     schema_view = get_swagger_view(title="WBA Kaart API")
 
     urlpatterns.extend(
-        [url(r"^__debug__/", include(debug_toolbar.urls)), url(r"^docs/$", schema_view)]
+        [re_path(r"^__debug__/", include(debug_toolbar.urls)), re_path(r"^docs/$", schema_view)]
     )

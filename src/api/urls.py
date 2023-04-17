@@ -1,8 +1,8 @@
 """
 API urls
 """
-from django.conf.urls import include, url
-from django.urls import path
+from django.conf.urls import include
+from django.urls import path, re_path
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions, routers
@@ -38,12 +38,12 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path("", include(router.urls)),
-    url(
+    re_path(
         r"^swagger(?P<format>\.json|\.yaml)$",
         schema_view.without_ui(cache_timeout=0),
         name="swagger-schema",
     ),  # noqa: line to long
-    url(
+    re_path(
         r"^redoc/$", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"
     ),
 ]

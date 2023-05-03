@@ -42,7 +42,7 @@ defusedxml==0.7.1
     # via djangorestframework-xml
 deprecated==1.2.13
     # via jwcrypto
-django==4.1.8
+django==4.1.9
     # via
     #   -r requirements.in
     #   datapunt-authorization-django
@@ -181,7 +181,11 @@ rfc3986==2.0.0
     # via oslo-config
 ruamel-yaml==0.17.22
     # via drf-yasg
+ruamel-yaml-clib==0.2.7
+    # via ruamel-yaml
 sentry-sdk==1.21.1
+    # via -r requirements.in
+setuptools==67.7.2
     # via -r requirements.in
 simplejson==3.19.1
     # via django-rest-swagger
@@ -214,8 +218,4 @@ wrapt==1.15.0
     #   debtcollector
     #   deprecated
 xlrd==2.0.1
-    # via -r requirements.in
-
-# The following packages are considered to be unsafe in a requirements file:
-setuptools==67.7.2
     # via -r requirements.in

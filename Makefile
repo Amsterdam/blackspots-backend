@@ -46,7 +46,7 @@ dev:
 	$(run) --service-ports dev
 
 test: lint
-	$(run) --rm test pytest $(ARGS)
+	$(run) test pytest $(ARGS)
 
 pdb:
 	$(run) test pytest --pdb $(ARGS)
@@ -55,7 +55,7 @@ clean:
 	$(dc) down -v
 
 bash:
-	$(run) --rm dev bash
+	$(run) dev bash
 
 shell:
 	$(manage) shell_plus

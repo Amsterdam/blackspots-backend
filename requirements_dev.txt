@@ -24,7 +24,7 @@ black==23.3.0
     # via -r requirements_dev.in
 cachetools==5.3.0
     # via tox
-certifi==2022.12.7
+certifi==2023.5.7
     # via
     #   -r ./requirements.txt
     #   requests
@@ -104,7 +104,7 @@ django==4.1.9
     #   model-bakery
 django-choices==1.7.2
     # via -r ./requirements.txt
-django-cors-headers==3.14.0
+django-cors-headers==4.0.0
     # via -r requirements_dev.in
 django-debug-toolbar==4.0.0
     # via -r requirements_dev.in
@@ -141,8 +141,6 @@ drf-extensions==0.7.1
     #   drf-amsterdam
 drf-yasg==1.21.5
     # via -r ./requirements.txt
-exceptiongroup==1.1.1
-    # via pytest
 executing==1.2.0
     # via stack-data
 filelock==3.12.0
@@ -161,7 +159,7 @@ iniconfig==2.0.0
     # via pytest
 ipdb==0.13.13
     # via -r requirements_dev.in
-ipython==8.13.1
+ipython==8.13.2
     # via ipdb
 iso8601==1.1.0
     # via
@@ -269,7 +267,7 @@ pexpect==4.8.0
     # via ipython
 pickleshare==0.7.5
     # via ipython
-platformdirs==3.5.0
+platformdirs==3.5.1
     # via
     #   black
     #   tox
@@ -337,7 +335,7 @@ pyyaml==6.0
     #   -r ./requirements.txt
     #   datapunt-config-loader
     #   oslo-config
-requests==2.29.0
+requests==2.30.0
     # via
     #   -r ./requirements.txt
     #   coreapi
@@ -350,7 +348,7 @@ rfc3986==2.0.0
     # via
     #   -r ./requirements.txt
     #   oslo-config
-ruamel-yaml==0.17.22
+ruamel-yaml==0.17.26
     # via
     #   -r ./requirements.txt
     #   drf-yasg
@@ -358,9 +356,7 @@ ruamel-yaml-clib==0.2.7
     # via
     #   -r ./requirements.txt
     #   ruamel-yaml
-sentry-sdk==1.21.1
-    # via -r ./requirements.txt
-setuptools==67.7.2
+sentry-sdk==1.22.2
     # via -r ./requirements.txt
 simplejson==3.19.1
     # via
@@ -381,21 +377,12 @@ sqlparse==0.4.4
     #   django-debug-toolbar
 stack-data==0.6.2
     # via ipython
-stevedore==5.0.0
+stevedore==5.1.0
     # via
     #   -r ./requirements.txt
     #   keystoneauth1
     #   oslo-config
     #   python-keystoneclient
-tomli==2.0.1
-    # via
-    #   autoflake
-    #   black
-    #   coverage
-    #   ipdb
-    #   pyproject-api
-    #   pytest
-    #   tox
 tox==4.5.1
     # via -r requirements_dev.in
 traitlets==5.9.0
@@ -426,4 +413,8 @@ wrapt==1.15.0
     #   debtcollector
     #   deprecated
 xlrd==2.0.1
+    # via -r ./requirements.txt
+
+# The following packages are considered to be unsafe in a requirements file:
+setuptools==67.7.2
     # via -r ./requirements.txt

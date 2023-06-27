@@ -128,14 +128,15 @@ def get_spot_type(abbreviation):
 
 def get_status(name: str):
     excel_to_enum = {
-        "Onbekend": Spot.StatusChoice.onbekend,
-        "Gereed": Spot.StatusChoice.gereed,
-        "Voorbereiding": Spot.StatusChoice.voorbereiding,
-        "Onderzoek/ ontwerp": Spot.StatusChoice.onderzoek_ontwerp,
-        "Uitvoering": Spot.StatusChoice.uitvoering,
-        "Geen maatregel": Spot.StatusChoice.geen_maatregel,
+        "onbekend": Spot.StatusChoice.onbekend,
+        "gereed": Spot.StatusChoice.gereed,
+        "voorbereiding": Spot.StatusChoice.voorbereiding,
+        "onderzoek/ ontwerp": Spot.StatusChoice.onderzoek_ontwerp,
+        "uitvoering": Spot.StatusChoice.uitvoering,
+        "geen maatregel": Spot.StatusChoice.geen_maatregel,
     }
-    value = excel_to_enum.get(name.strip())
+    name = name.strip().lower()
+    value = excel_to_enum.get(name)
     if not value:
         raise SkipError(f"Unknown status value: {name}")
     else:

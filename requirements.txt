@@ -41,7 +41,7 @@ defusedxml==0.7.1
     # via djangorestframework-xml
 deprecated==1.2.14
     # via jwcrypto
-django==4.1.11
+django==4.1.12
     # via
     #   -r requirements.in
     #   datapunt-authorization-django
@@ -85,7 +85,7 @@ idna==3.4
     # via requests
 inflection==0.5.1
     # via drf-yasg
-iso8601==2.0.0
+iso8601==2.1.0
     # via
     #   keystoneauth1
     #   oslo-utils
@@ -128,7 +128,7 @@ oslo-utils==6.2.1
     # via
     #   oslo-serialization
     #   python-keystoneclient
-packaging==23.1
+packaging==23.2
     # via
     #   drf-yasg
     #   oslo-utils
@@ -141,7 +141,7 @@ pbr==5.11.1
     #   oslo-serialization
     #   python-keystoneclient
     #   stevedore
-psycopg2-binary==2.9.8
+psycopg2-binary==2.9.9
     # via -r requirements.in
 pycparser==2.21
     # via cffi
@@ -183,13 +183,13 @@ requests==2.31.0
     #   python-swiftclient
 rfc3986==2.0.0
     # via oslo-config
-rpds-py==0.10.3
+rpds-py==0.10.6
     # via
     #   jsonschema
     #   referencing
-sentry-sdk==1.31.0
+sentry-sdk==1.32.0
     # via -r requirements.in
-simplejson==3.19.1
+simplejson==3.19.2
     # via django-rest-swagger
 six==1.16.0
     # via
@@ -215,7 +215,7 @@ uritemplate==4.1.1
     # via
     #   coreapi
     #   drf-yasg
-urllib3==2.0.5
+urllib3==2.0.6
     # via
     #   requests
     #   sentry-sdk
